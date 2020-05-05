@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "389890864915",
+    "firebase_url": "https://benayty-38d9a.firebaseio.com",
+    "project_id": "benayty-38d9a",
+    "storage_bucket": "benayty-38d9a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:389890864915:android:65b273b6161b7a996b4ce6",
+        "android_client_info": {
+          "package_name": "com.pomac.benayty"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "389890864915-45d377gqgft9sg17s86pjaq2p4t8lf39.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkC9PMPr40MrmTQ7DPzUJ6g1NXcUXpRf0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "389890864915-45d377gqgft9sg17s86pjaq2p4t8lf39.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
