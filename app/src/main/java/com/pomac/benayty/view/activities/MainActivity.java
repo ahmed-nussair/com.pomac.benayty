@@ -1,6 +1,8 @@
 package com.pomac.benayty.view.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.Navigation;
+import androidx.navigation.Navigator;
 
 import android.os.Bundle;
 import android.widget.FrameLayout;
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
             menuItemHeartBackground.setSelected(false);
             menuItemNotificationBackground.setSelected(false);
             menuItemSpeechBackground.setSelected(false);
+
+            Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.mainFragment);
         });
 
         menuItemHeart.setOnClickListener(l -> {
@@ -51,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
             menuItemHeartBackground.setSelected(true);
             menuItemNotificationBackground.setSelected(false);
             menuItemSpeechBackground.setSelected(false);
+
+            Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.wishlistFragment);
         });
 
         menuItemNotification.setOnClickListener(l -> {
@@ -64,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
             menuItemHeartBackground.setSelected(false);
             menuItemNotificationBackground.setSelected(true);
             menuItemSpeechBackground.setSelected(false);
+
+            Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.notificationFragment);
         });
 
         menuItemSpeech.setOnClickListener(l -> {
@@ -76,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
             menuItemHeartBackground.setSelected(false);
             menuItemNotificationBackground.setSelected(false);
             menuItemSpeechBackground.setSelected(true);
+
+            Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.messagesFragment);
         });
     }
 }

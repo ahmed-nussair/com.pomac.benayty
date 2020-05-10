@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        tools:ignore="UselessParent">
+
+        <FrameLayout
+            android:id="@+id/menu_item_home_background"
+            android:background="@drawable/menu_item_background"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true">
+
+            <ImageView
+                android:id="@+id/menu_item_home"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/menu_item_home"
+                android:layout_gravity="center"
+                tools:ignore="ContentDescription" />
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:id="@+id/menu_item_heart_background"
+            android:background="@drawable/menu_item_background"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true">
+
+            <ImageView
+                android:id="@+id/menu_item_heart"
+                android:layout_width="@dimen/_20ssp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/menu_item_heart"
+                android:layout_gravity="center"
+                tools:ignore="ContentDescription" />
+
+        </FrameLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:orientation="horizontal"
+        android:layout_marginEnd="@dimen/_10sdp"
+        tools:ignore="UselessParent">
+
+        <FrameLayout
+            android:id="@+id/menu_item_notification_background"
+            android:background="@drawable/menu_item_background"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true">
+
+            <ImageView
+                android:id="@+id/menu_item_notification"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_gravity="center"
+                android:src="@drawable/menu_item_notification"
+                tools:ignore="ContentDescription" />
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:id="@+id/menu_item_speech_background"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:background="@drawable/menu_item_background"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true">
+
+            <ImageView
+                android:id="@+id/menu_item_speech"
+                android:layout_width="@dimen/_20ssp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_gravity="center"
+                android:src="@drawable/menu_item_speech"
+                tools:ignore="ContentDescription" />
+
+        </FrameLayout>
+
+    </RelativeLayout>
+</RelativeLayout>

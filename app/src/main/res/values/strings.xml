@@ -12,4 +12,8 @@
     <string name="menu_item_notification">الإشعارات</string>
     <string name="menu_item_speech">الرسائل</string>
 
+    <string name="wishlist_fragment">المفضلة</string>
+    <string name="notification_fragment">الإشعارات</string>
+    <string name="speech_fragment">الرسائل</string>
+
 </resources>
