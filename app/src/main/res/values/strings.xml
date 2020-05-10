@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Benayty</string>
+
+    <string name="floating_button_tool_tip">إضافة إعلان جديد</string>
+
+    <string name="navigation_back">رجوع</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
