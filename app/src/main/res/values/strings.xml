@@ -6,4 +6,10 @@
     <string name="navigation_back">رجوع</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="menu_item_home">الرئيسية</string>
+    <string name="menu_item_heart">المفضلة</string>
+    <string name="menu_item_notification">الإشعارات</string>
+    <string name="menu_item_speech">الرسائل</string>
+
 </resources>
