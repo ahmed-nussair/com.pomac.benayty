@@ -113,7 +113,9 @@ public class MainCategoryFragment extends Fragment implements AdFilter{
     @Override
     public void setArea(int areaId, String areaName) {
         this.areaId = areaId;
+        this.cityId = -1;
         areaField.setText(areaName);
+        cityField.setText(getResources().getString(R.string.choose_city));
     }
 
     @Override
