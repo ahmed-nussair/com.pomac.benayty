@@ -8,6 +8,10 @@ import java.util.Date;
 public class Globals {
 
     /**
+     * For storing user token
+     */
+    public static String token = "1583861467mUAX0TtHPz1583861467";
+    /**
      * Base URL
      */
     public static final String BASE_URL = "https://pomac.info/";

@@ -5,11 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".view.fragments.WishlistFragment">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/wishListRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textColor="#000000"
-        android:text="@string/wishlist_fragment" />
+        android:layout_height="match_parent" />
 
 </FrameLayout>
