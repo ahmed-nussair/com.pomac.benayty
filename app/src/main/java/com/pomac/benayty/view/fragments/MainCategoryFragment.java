@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
@@ -96,6 +97,8 @@ public class MainCategoryFragment extends Fragment implements AdFilter{
                                 this, this, MainCategoryFieldType.CityField);
                 dialog.setCancelable(false);
                 dialog.show();
+            } else {
+                Toast.makeText(getContext(), "اختر المنطقة أولًا", Toast.LENGTH_LONG).show();
             }
 
         });

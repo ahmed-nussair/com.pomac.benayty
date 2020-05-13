@@ -36,7 +36,7 @@ public class MainCategoryFieldDialog extends Dialog implements
 
     private TextView dialogTitle;
     private RecyclerView fieldRecyclerView;
-    private Button submitButton;
+    private TextView submitButton;
 
     private Fragment fragment;
     private AdFilter adFilter;
@@ -65,6 +65,7 @@ public class MainCategoryFieldDialog extends Dialog implements
 
         switch (type){
             case SecondaryCategoryField:
+                dialogTitle.setText(fragment.getResources().getString(R.string.choose_secondary_item));
                 SecondaryCategoriesViewModel viewModel = ViewModelProviders.of(fragment).get(SecondaryCategoriesViewModel.class);
 
                 viewModel.getSecondaryCategoriesResponse(adFilter.getMainCategoryId()).observe(fragment, response -> {
@@ -75,6 +76,7 @@ public class MainCategoryFieldDialog extends Dialog implements
                 });
                 break;
             case AreaField:
+                dialogTitle.setText(fragment.getResources().getString(R.string.choose_area));
                 AreasViewModel areasViewModel = ViewModelProviders.of(fragment).get(AreasViewModel.class);
                 areasViewModel.getAreasResponse().observe(fragment,
                         response -> {
@@ -84,6 +86,7 @@ public class MainCategoryFieldDialog extends Dialog implements
                         });
                 break;
             case CityField:
+                dialogTitle.setText(fragment.getResources().getString(R.string.choose_city));
                 CitiesViewModel citiesViewModel = ViewModelProviders.of(fragment).get(CitiesViewModel.class);
                 citiesViewModel.getCitiesResponse(adFilter.getAreaId()).observe(fragment,
                 response -> {

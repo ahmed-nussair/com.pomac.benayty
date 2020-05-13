@@ -29,5 +29,6 @@
     <string name="choose_area">اختر المنطقة</string>
     <string name="choose_city">اختر المدينة</string>
     <string name="find_secondary_items">بحث</string>
+    <string name="close_dialog">إلغاء</string>
 
 </resources>

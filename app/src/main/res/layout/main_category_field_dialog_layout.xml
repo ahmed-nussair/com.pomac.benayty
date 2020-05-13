@@ -23,10 +23,14 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <Button
+    <TextView
         android:id="@+id/submitButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_50sdp"
         android:layout_gravity="center_horizontal"
-        android:text="OK" />
+        android:background="@drawable/dialog_button_background"
+        android:fontFamily="@font/cairo_bold"
+        android:gravity="center"
+        android:text="@string/close_dialog"
+        android:textColor="#ffffff" />
 </LinearLayout>
