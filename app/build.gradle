@@ -62,4 +62,6 @@ dependencies {
     implementation 'com.android.support:design:29.1.1'
 
     implementation 'com.google.android.material:material:1.2.0-alpha06'
+
+    implementation 'com.makeramen:roundedimageview:2.3.0';
 }

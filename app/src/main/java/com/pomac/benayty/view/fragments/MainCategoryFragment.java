@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,7 @@ import android.widget.Toast;
 
 import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
-import com.pomac.benayty.view.MainCategoryFieldType;
+import com.pomac.benayty.view.enums.MainCategoryFieldType;
 import com.pomac.benayty.view.dialogs.MainCategoryFieldDialog;
 import com.pomac.benayty.view.interfaces.AdFilter;
 import com.pomac.benayty.view.interfaces.AppNavigator;
@@ -101,6 +102,17 @@ public class MainCategoryFragment extends Fragment implements AdFilter{
                 Toast.makeText(getContext(), "اختر المنطقة أولًا", Toast.LENGTH_LONG).show();
             }
 
+        });
+
+        findSecondaryCategoriesButton.setOnClickListener(l -> {
+
+            Bundle bundle = new Bundle();
+            bundle.putInt(Globals.MAIN_CATEGORY_ID, mainCategoryId);
+            bundle.putString(Globals.MAIN_CATEGORY_NAME, mainCategoryTitle);
+            bundle.putInt(Globals.SECONDARY_CATEGORY_ID, secondaryCategoryId);
+            bundle.putInt(Globals.AREA_ID, areaId);
+            bundle.putInt(Globals.CITY_ID, cityId);
+            Navigation.findNavController(getActivity().findViewById(R.id.nav_host)).navigate(R.id.searchResultsFragment, bundle);
         });
     }
 

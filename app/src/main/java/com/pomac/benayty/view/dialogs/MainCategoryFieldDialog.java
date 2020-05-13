@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,7 +17,7 @@ import com.pomac.benayty.R;
 import com.pomac.benayty.adapters.AreasAdapter;
 import com.pomac.benayty.adapters.CitiesAdapter;
 import com.pomac.benayty.adapters.SecondaryCategoriesAdapter;
-import com.pomac.benayty.view.MainCategoryFieldType;
+import com.pomac.benayty.view.enums.MainCategoryFieldType;
 import com.pomac.benayty.view.interfaces.AdFilter;
 import com.pomac.benayty.view.interfaces.OnAreaSelected;
 import com.pomac.benayty.view.interfaces.OnCitySelected;
