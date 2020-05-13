@@ -5,28 +5,35 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
 import com.pomac.benayty.adapters.MainCategoriesAdapter;
+import com.pomac.benayty.view.interfaces.AppNavigator;
+import com.pomac.benayty.view.interfaces.OnMainCategorySelected;
 import com.pomac.benayty.viewmodel.MainCategoriesViewModel;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements OnMainCategorySelected {
 
     private RecyclerView mainCategoriesRecyclerView;
     private ProgressBar progressBar;
+    private AppNavigator navigator;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,18 +50,40 @@ public class MainFragment extends Fragment {
 
         assert getActivity() != null;
 
+        navigator = (AppNavigator) getActivity();
+        navigator.setTitle(getResources().getString(R.string.home_page_title));
+
         Animation progressBarAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.progress);
         progressBarAnimation.setDuration(1000);
         progressBar.startAnimation(progressBarAnimation);
         MainCategoriesViewModel viewModel = ViewModelProviders.of(this).get(MainCategoriesViewModel.class);
 
         viewModel.getMainCategoriesResponse().observe(getActivity(), response -> {
-            MainCategoriesAdapter adapter = new MainCategoriesAdapter(getActivity(), response.getData());
-            mainCategoriesRecyclerView.setAdapter(adapter);
-            mainCategoriesRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false));
-            adapter.notifyDataSetChanged();
-            mainCategoriesRecyclerView.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.GONE);
+            if(response != null) {
+                MainCategoriesAdapter adapter = new MainCategoriesAdapter(getActivity(), response.getData(), this);
+                mainCategoriesRecyclerView.setAdapter(adapter);
+                mainCategoriesRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false));
+                adapter.notifyDataSetChanged();
+                mainCategoriesRecyclerView.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+            } else {
+                Log.e(Globals.TAG, "Error");
+                TextView errorTextView = getActivity().findViewById(R.id.errorTextView);
+                errorTextView.setVisibility(View.VISIBLE);
+                mainCategoriesRecyclerView.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
+            }
+
         });
+    }
+
+    @Override
+    public void onMainCategorySelected(int mainCategoryId, String mainCategoryName) {
+        assert getActivity() != null;
+        Bundle bundle = new Bundle();
+        bundle.putInt(Globals.MAIN_CATEGORY_ID, mainCategoryId);
+        bundle.putString(Globals.MAIN_CATEGORY_NAME, mainCategoryName);
+        Navigation.findNavController(getActivity().findViewById(R.id.nav_host)).navigate(R.id.mainCategoryFragment, bundle);
+        navigator.navigateToOtherPage();
     }
 }

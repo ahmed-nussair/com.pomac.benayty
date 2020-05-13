@@ -15,5 +15,19 @@
     <string name="wishlist_fragment">المفضلة</string>
     <string name="notification_fragment">الإشعارات</string>
     <string name="speech_fragment">الرسائل</string>
+    <string name="main_category_fragment">Main Category Fragment</string>
+
+    <string name="home_page_title">الرئيسية</string>
+    <string name="wish_list_page_title">المفضلة</string>
+    <string name="notifications_page_title">الإشعارات</string>
+    <string name="messages_page_title">الرسائل</string>
+
+    <string name="error_connection">حدث خطأ</string>
+
+
+    <string name="choose_secondary_item">اختر القسم الفرعي</string>
+    <string name="choose_area">اختر المنطقة</string>
+    <string name="choose_city">اختر المدينة</string>
+    <string name="find_secondary_items">بحث</string>
 
 </resources>

@@ -14,4 +14,14 @@ public class Globals {
      * Log tag
      */
     public static final String TAG = "nussair";
+
+    /**
+     * Field for main category id.
+     */
+    public static final String MAIN_CATEGORY_ID = "main_category_id";
+
+    /**
+     * Field for main category name.
+     */
+    public static final String MAIN_CATEGORY_NAME = "main_category_name";
 }

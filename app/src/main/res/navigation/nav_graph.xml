@@ -12,17 +12,22 @@
         tools:layout="@layout/fragment_main" />
     <fragment
         android:id="@+id/wishlistFragment"
-        android:name="com.pomac.benayty.WishlistFragment"
+        android:name="com.pomac.benayty.view.fragments.WishlistFragment"
         android:label="fragment_wishlist"
         tools:layout="@layout/fragment_wishlist" />
     <fragment
         android:id="@+id/notificationFragment"
-        android:name="com.pomac.benayty.NotificationFragment"
+        android:name="com.pomac.benayty.view.fragments.NotificationFragment"
         android:label="fragment_notification"
         tools:layout="@layout/fragment_notification" />
     <fragment
         android:id="@+id/messagesFragment"
-        android:name="com.pomac.benayty.MessagesFragment"
+        android:name="com.pomac.benayty.view.fragments.MessagesFragment"
         android:label="fragment_messages"
         tools:layout="@layout/fragment_messages" />
+    <fragment
+        android:id="@+id/mainCategoryFragment"
+        android:name="com.pomac.benayty.view.fragments.MainCategoryFragment"
+        android:label="fragment_main_category"
+        tools:layout="@layout/fragment_main_category" />
 </navigation>

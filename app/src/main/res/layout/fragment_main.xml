@@ -18,5 +18,16 @@
         android:layout_height="match_parent"
         android:visibility="gone" />
 
+    <TextView
+        android:id="@+id/errorTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/error_connection"
+        android:gravity="center"
+        android:fontFamily="@font/cairo_bold"
+        android:textColor="@color/appColor"
+        android:textSize="@dimen/_18ssp"
+        android:visibility="gone"/>
+
 
 </FrameLayout>

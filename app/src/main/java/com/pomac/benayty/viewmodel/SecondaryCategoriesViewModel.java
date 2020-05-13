@@ -1,16 +1,12 @@
 package com.pomac.benayty.viewmodel;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.pomac.benayty.Globals;
-import com.pomac.benayty.apis.MainCategoriesApi;
-import com.pomac.benayty.model.response.MainCategoriesResponse;
-
-import java.util.Objects;
+import com.pomac.benayty.apis.SecondaryCategoriesApi;
+import com.pomac.benayty.model.response.SecondaryCategoriesResponse;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -20,34 +16,34 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainCategoriesViewModel extends ViewModel {
+public class SecondaryCategoriesViewModel extends ViewModel {
 
-    private MutableLiveData<MainCategoriesResponse> mainCategoriesResponse;
+    private MutableLiveData<SecondaryCategoriesResponse> responseMutableLiveData;
     private Disposable disposable;
 
-    public LiveData<MainCategoriesResponse> getMainCategoriesResponse() {
-        if (mainCategoriesResponse == null) {
-            mainCategoriesResponse = new MutableLiveData<>();
-            loadMainCategories();
+    public LiveData<SecondaryCategoriesResponse> getSecondaryCategoriesResponse(int mainCategoryId) {
+        if(responseMutableLiveData == null) {
+            responseMutableLiveData = new MutableLiveData<>();
+            loadSecondaryCategories(mainCategoryId);
         }
-        return mainCategoriesResponse;
+        return responseMutableLiveData;
     }
 
-    private void loadMainCategories() {
+    private void loadSecondaryCategories(int mainCategoryId) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Globals.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
-        MainCategoriesApi api = retrofit.create(MainCategoriesApi.class);
+        SecondaryCategoriesApi api = retrofit.create(SecondaryCategoriesApi.class);
 
-        Observable<MainCategoriesResponse> observable = api.getMainCategories()
+        Observable<SecondaryCategoriesResponse> observable = api.getSecondaryCategories(mainCategoryId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        disposable = observable.subscribe(response -> mainCategoriesResponse.setValue(response),
-                error -> mainCategoriesResponse.setValue(null));
+        disposable = observable.subscribe(response -> responseMutableLiveData.setValue(response),
+                error -> responseMutableLiveData.setValue(null));
     }
 
     @Override

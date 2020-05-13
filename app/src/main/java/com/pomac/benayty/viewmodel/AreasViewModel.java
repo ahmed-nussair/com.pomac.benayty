@@ -1,16 +1,12 @@
 package com.pomac.benayty.viewmodel;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.pomac.benayty.Globals;
-import com.pomac.benayty.apis.MainCategoriesApi;
-import com.pomac.benayty.model.response.MainCategoriesResponse;
-
-import java.util.Objects;
+import com.pomac.benayty.apis.AreasApi;
+import com.pomac.benayty.model.response.AreasResponse;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -20,34 +16,33 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainCategoriesViewModel extends ViewModel {
-
-    private MutableLiveData<MainCategoriesResponse> mainCategoriesResponse;
+public class AreasViewModel extends ViewModel {
+    private MutableLiveData<AreasResponse> mutableLiveData;
     private Disposable disposable;
 
-    public LiveData<MainCategoriesResponse> getMainCategoriesResponse() {
-        if (mainCategoriesResponse == null) {
-            mainCategoriesResponse = new MutableLiveData<>();
-            loadMainCategories();
+    public LiveData<AreasResponse> getAreasResponse() {
+        if(mutableLiveData == null) {
+            mutableLiveData = new MutableLiveData<>();
+            loadAreas();
         }
-        return mainCategoriesResponse;
+        return  mutableLiveData;
     }
 
-    private void loadMainCategories() {
+    private void loadAreas() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Globals.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
-        MainCategoriesApi api = retrofit.create(MainCategoriesApi.class);
+        AreasApi api = retrofit.create(AreasApi.class);
 
-        Observable<MainCategoriesResponse> observable = api.getMainCategories()
+        Observable<AreasResponse> observable = api.getAreas()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        disposable = observable.subscribe(response -> mainCategoriesResponse.setValue(response),
-                error -> mainCategoriesResponse.setValue(null));
+        disposable = observable.subscribe(response -> mutableLiveData.setValue(response),
+                error -> mutableLiveData.setValue(null));
     }
 
     @Override
