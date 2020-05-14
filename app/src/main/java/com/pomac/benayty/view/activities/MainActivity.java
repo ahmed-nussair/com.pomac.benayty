@@ -1,7 +1,11 @@
 package com.pomac.benayty.view.activities;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -11,12 +15,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.Navigation;
 
+import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
 import com.pomac.benayty.adapters.DrawerAdapter;
 import com.pomac.benayty.view.DrawerItem;
 import com.pomac.benayty.view.interfaces.AppNavigator;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements AppNavigator {
 
@@ -26,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
     private DrawerLayout drawerLayout;
     private ListView drawerListView;
 
+    @SuppressLint("RtlHardcoded")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,17 +57,7 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
         menuItemHome.setSelected(true);
         menuItemHomeBackground.setSelected(true);
 
-        ArrayList<DrawerItem> drawerItems = new ArrayList<>();
-        drawerItems.add(new DrawerItem("الصفحة الرئيسية", R.drawable.home));
-        drawerItems.add(new DrawerItem("إعلاناتي", R.drawable.offer));
-        drawerItems.add(new DrawerItem("التسجيل", R.drawable.persona));
-        drawerItems.add(new DrawerItem("المفضلة", R.drawable.favourite));
-        drawerItems.add(new DrawerItem("اتصل بنا", R.drawable.contact));
-        drawerItems.add(new DrawerItem("تسجيل الدخول / الخروج", R.drawable.loginout));
-        DrawerAdapter adapter = new DrawerAdapter(this, drawerItems);
-        drawerListView.setAdapter(adapter);
-
-        drawerButton.setOnClickListener(l -> drawerLayout.openDrawer(Gravity.RIGHT));
+        prepareDrawer();
         menuItemHome.setOnClickListener(l -> {
             menuItemHome.setSelected(true);
             menuItemHeart.setSelected(false);
@@ -119,6 +116,47 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
         });
     }
 
+    @SuppressLint("RtlHardcoded")
+    private void prepareDrawer() {
+        ArrayList<DrawerItem> drawerItems = new ArrayList<>();
+        drawerItems.add(new DrawerItem("الصفحة الرئيسية", R.drawable.home));
+        drawerItems.add(new DrawerItem("إعلاناتي", R.drawable.offer));
+        drawerItems.add(new DrawerItem("التسجيل", R.drawable.persona));
+        drawerItems.add(new DrawerItem("المفضلة", R.drawable.favourite));
+        drawerItems.add(new DrawerItem("اتصل بنا", R.drawable.contact));
+        drawerItems.add(new DrawerItem("تسجيل الدخول / الخروج", R.drawable.loginout));
+
+        DrawerAdapter adapter = new DrawerAdapter(this, drawerItems);
+        drawerListView.setAdapter(adapter);
+
+        drawerListView.setOnItemClickListener((parent, view, position, id) -> {
+            DrawerItem item = (DrawerItem) adapter.getItem(position);
+
+            if(item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_main))) {
+
+                Log.d(Globals.TAG, Objects.requireNonNull(getResources().getString(R.string.drawer_item_main)));
+                drawerLayout.closeDrawer(Gravity.RIGHT);
+
+            } else if(item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_my_ads))) {
+                Log.d(Globals.TAG, getResources().getString(R.string.drawer_item_my_ads));
+                drawerLayout.closeDrawer(Gravity.RIGHT);
+            } else if(item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_wish_list))) {
+                Log.d(Globals.TAG, getResources().getString(R.string.drawer_item_wish_list));
+                drawerLayout.closeDrawer(Gravity.RIGHT);
+            } else if(item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_register))) {
+                Log.d(Globals.TAG, getResources().getString(R.string.drawer_item_register));
+                drawerLayout.closeDrawer(Gravity.RIGHT);
+            } else if(item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_contact_us))) {
+                Log.d(Globals.TAG, getResources().getString(R.string.drawer_item_contact_us));
+                drawerLayout.closeDrawer(Gravity.RIGHT);
+            } else if(item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_login_logout))) {
+                Log.d(Globals.TAG, getResources().getString(R.string.drawer_item_login_logout));
+                drawerLayout.closeDrawer(Gravity.RIGHT);
+            }
+        });
+        drawerButton.setOnClickListener(l -> drawerLayout.openDrawer(Gravity.RIGHT));
+    }
+
     @Override
     public void setTitle(String title) {
         pageTitle.setText(title);
@@ -145,5 +183,14 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
         menuItemHeartBackground.setSelected(false);
         menuItemNotificationBackground.setSelected(false);
         menuItemSpeechBackground.setSelected(false);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Globals.compositeDisposable.dispose();
+        if(Globals.compositeDisposable.isDisposed()) {
+            Log.d(Globals.TAG, "Disposed successfully");
+        }
     }
 }

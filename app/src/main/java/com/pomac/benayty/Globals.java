@@ -2,10 +2,14 @@ package com.pomac.benayty;
 
 import java.util.Date;
 
+import io.reactivex.disposables.CompositeDisposable;
+
 /**
  * Global variables, fields, and methods for the app.
  */
 public class Globals {
+
+    public static CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     /**
      * For storing user token

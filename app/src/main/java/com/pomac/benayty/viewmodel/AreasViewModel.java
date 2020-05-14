@@ -18,7 +18,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AreasViewModel extends ViewModel {
     private MutableLiveData<AreasResponse> mutableLiveData;
-    private Disposable disposable;
 
     public LiveData<AreasResponse> getAreasResponse() {
         if(mutableLiveData == null) {
@@ -41,13 +40,9 @@ public class AreasViewModel extends ViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        disposable = observable.subscribe(response -> mutableLiveData.setValue(response),
+        Disposable disposable = observable.subscribe(response -> mutableLiveData.setValue(response),
                 error -> mutableLiveData.setValue(null));
-    }
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        disposable.dispose();
+        Globals.compositeDisposable.add(disposable);
     }
 }

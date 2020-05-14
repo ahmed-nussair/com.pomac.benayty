@@ -6,6 +6,18 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.pomac.benayty.apis.FcmTokenUpdateApi;
+import com.pomac.benayty.model.response.FcmTokenUpdateResponse;
+
+import java.util.Objects;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class BenaytyMessagingService extends FirebaseMessagingService {
 
@@ -43,8 +55,28 @@ public class BenaytyMessagingService extends FirebaseMessagingService {
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
 
-        Log.d(Globals.TAG, "New Token: " + s);
+        Log.d(Globals.TAG, "New FCM token: " + s);
+        sendRegistrationToServer(s);
+    }
 
-        //sendRegistrationToServer(s);
+    private void sendRegistrationToServer(String s) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Globals.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build();
+
+        FcmTokenUpdateApi api = retrofit.create(FcmTokenUpdateApi.class);
+
+        Observable<FcmTokenUpdateResponse> observable = api.updateFcmToken(Globals.token, s)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        Disposable disposable = observable.subscribe(
+                response -> Log.d(Globals.TAG, response.getMessage()),
+                error -> Log.e(Globals.TAG, Objects.requireNonNull(error.getMessage()))
+        );
+
+        Globals.compositeDisposable.add(disposable);
     }
 }

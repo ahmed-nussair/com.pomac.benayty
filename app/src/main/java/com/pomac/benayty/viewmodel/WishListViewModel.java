@@ -19,7 +19,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class WishListViewModel extends ViewModel {
 
     private MutableLiveData<WishListResponse> wishListResponseMutableLiveData;
-    private Disposable disposable;
 
     public LiveData<WishListResponse> getWishList(String token) {
         if(wishListResponseMutableLiveData == null) {
@@ -42,14 +41,11 @@ public class WishListViewModel extends ViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        disposable = observable.subscribe(
+        Disposable disposable = observable.subscribe(
                 response -> wishListResponseMutableLiveData.setValue(response),
                 error -> wishListResponseMutableLiveData.setValue(null)
         );
-    }
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        disposable.dispose();
+
+        Globals.compositeDisposable.add(disposable);
     }
 }

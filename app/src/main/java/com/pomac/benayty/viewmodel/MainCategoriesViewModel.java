@@ -1,7 +1,5 @@
 package com.pomac.benayty.viewmodel;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -9,8 +7,6 @@ import androidx.lifecycle.ViewModel;
 import com.pomac.benayty.Globals;
 import com.pomac.benayty.apis.MainCategoriesApi;
 import com.pomac.benayty.model.response.MainCategoriesResponse;
-
-import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -23,7 +19,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainCategoriesViewModel extends ViewModel {
 
     private MutableLiveData<MainCategoriesResponse> mainCategoriesResponse;
-    private Disposable disposable;
 
     public LiveData<MainCategoriesResponse> getMainCategoriesResponse() {
         if (mainCategoriesResponse == null) {
@@ -46,13 +41,9 @@ public class MainCategoriesViewModel extends ViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        disposable = observable.subscribe(response -> mainCategoriesResponse.setValue(response),
+        Disposable disposable = observable.subscribe(response -> mainCategoriesResponse.setValue(response),
                 error -> mainCategoriesResponse.setValue(null));
-    }
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        disposable.dispose();
+        Globals.compositeDisposable.add(disposable);
     }
 }

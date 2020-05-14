@@ -19,7 +19,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AdsViewModel extends ViewModel {
 
     private MutableLiveData<AdsResponse> mutableLiveData;
-    private Disposable disposable;
 
     public LiveData<AdsResponse> getAdsList(int mainCategoryId, int secondaryCategoryId, int areaId, int cityId) {
         if (mutableLiveData == null) {
@@ -42,16 +41,12 @@ public class AdsViewModel extends ViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        disposable = observable.subscribe(
+        Disposable disposable = observable.subscribe(
                 response -> mutableLiveData.setValue(response),
                 error -> mutableLiveData.setValue(null)
         );
 
-    }
+        Globals.compositeDisposable.add(disposable);
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        disposable.dispose();
     }
 }

@@ -19,7 +19,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SecondaryCategoriesViewModel extends ViewModel {
 
     private MutableLiveData<SecondaryCategoriesResponse> responseMutableLiveData;
-    private Disposable disposable;
 
     public LiveData<SecondaryCategoriesResponse> getSecondaryCategoriesResponse(int mainCategoryId) {
         if(responseMutableLiveData == null) {
@@ -42,13 +41,9 @@ public class SecondaryCategoriesViewModel extends ViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        disposable = observable.subscribe(response -> responseMutableLiveData.setValue(response),
+        Disposable disposable = observable.subscribe(response -> responseMutableLiveData.setValue(response),
                 error -> responseMutableLiveData.setValue(null));
-    }
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        disposable.dispose();
+        Globals.compositeDisposable.add(disposable);
     }
 }
