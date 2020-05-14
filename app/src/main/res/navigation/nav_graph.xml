@@ -35,4 +35,9 @@
         android:name="com.pomac.benayty.view.fragments.SearchResultsFragment"
         android:label="fragment_search_results"
         tools:layout="@layout/fragment_search_results" />
+    <fragment
+        android:id="@+id/myAdsFragment"
+        android:name="com.pomac.benayty.view.fragments.MyAdsFragment"
+        android:label="fragment_my_ads"
+        tools:layout="@layout/fragment_my_ads" />
 </navigation>

@@ -154,12 +154,36 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
 
             if(item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_main))) {
 
-                Log.d(Globals.TAG, Objects.requireNonNull(getResources().getString(R.string.drawer_item_main)));
                 drawerLayout.closeDrawer(Gravity.RIGHT);
 
+                menuItemHome.setSelected(true);
+                menuItemHeart.setSelected(false);
+                menuItemNotification.setSelected(false);
+                menuItemSpeech.setSelected(false);
+
+                menuItemHomeBackground.setSelected(true);
+                menuItemHeartBackground.setSelected(false);
+                menuItemNotificationBackground.setSelected(false);
+                menuItemSpeechBackground.setSelected(false);
+
+                Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.mainFragment);
+
             } else if(item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_my_ads))) {
-                Log.d(Globals.TAG, getResources().getString(R.string.drawer_item_my_ads));
                 drawerLayout.closeDrawer(Gravity.RIGHT);
+
+                menuItemHome.setSelected(false);
+                menuItemHeart.setSelected(false);
+                menuItemNotification.setSelected(false);
+                menuItemSpeech.setSelected(false);
+
+                menuItemHomeBackground.setSelected(false);
+                menuItemHeartBackground.setSelected(false);
+                menuItemNotificationBackground.setSelected(false);
+                menuItemSpeechBackground.setSelected(false);
+
+                pageTitle.setText(getResources().getString(R.string.drawer_item_my_ads));
+
+                Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.myAdsFragment);
             } else if(item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_wish_list))) {
                 Log.d(Globals.TAG, getResources().getString(R.string.drawer_item_wish_list));
                 drawerLayout.closeDrawer(Gravity.RIGHT);
