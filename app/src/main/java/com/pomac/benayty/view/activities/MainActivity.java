@@ -32,32 +32,31 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
     private DrawerLayout drawerLayout;
     private ListView drawerListView;
 
+    private FrameLayout menuItemHomeBackground;
+    private FrameLayout menuItemHeartBackground;
+    private FrameLayout menuItemNotificationBackground;
+    private FrameLayout menuItemSpeechBackground;
+
+    private ImageView menuItemHome;
+    private ImageView menuItemHeart;
+    private ImageView menuItemNotification;
+    private ImageView menuItemSpeech;
+
     @SuppressLint("RtlHardcoded")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        pageTitle = findViewById(R.id.pageTitle);
-        drawerButton = findViewById(R.id.drawerButton);
-        back = findViewById(R.id.back);
-        drawerLayout = findViewById(R.id.drawerLayout);
-        drawerListView = findViewById(R.id.drawerListView);
-
-        FrameLayout menuItemHomeBackground = findViewById(R.id.menu_item_home_background);
-        FrameLayout menuItemHeartBackground = findViewById(R.id.menu_item_heart_background);
-        FrameLayout menuItemNotificationBackground = findViewById(R.id.menu_item_notification_background);
-        FrameLayout menuItemSpeechBackground = findViewById(R.id.menu_item_speech_background);
-
-        ImageView menuItemHome = findViewById(R.id.menu_item_home);
-        ImageView menuItemHeart = findViewById(R.id.menu_item_heart);
-        ImageView menuItemNotification = findViewById(R.id.menu_item_notification);
-        ImageView menuItemSpeech = findViewById(R.id.menu_item_speech);
-
-        menuItemHome.setSelected(true);
-        menuItemHomeBackground.setSelected(true);
+        initViews();
 
         prepareDrawer();
+
+        attachListenersForViews();
+
+    }
+
+    private void attachListenersForViews() {
         menuItemHome.setOnClickListener(l -> {
             menuItemHome.setSelected(true);
             menuItemHeart.setSelected(false);
@@ -114,6 +113,27 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
 
             Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.messagesFragment);
         });
+    }
+
+    private void initViews() {
+        pageTitle = findViewById(R.id.pageTitle);
+        drawerButton = findViewById(R.id.drawerButton);
+        back = findViewById(R.id.back);
+        drawerLayout = findViewById(R.id.drawerLayout);
+        drawerListView = findViewById(R.id.drawerListView);
+
+        menuItemHomeBackground = findViewById(R.id.menu_item_home_background);
+        menuItemHeartBackground = findViewById(R.id.menu_item_heart_background);
+        menuItemNotificationBackground = findViewById(R.id.menu_item_notification_background);
+        menuItemSpeechBackground = findViewById(R.id.menu_item_speech_background);
+
+        menuItemHome = findViewById(R.id.menu_item_home);
+        menuItemHeart = findViewById(R.id.menu_item_heart);
+        menuItemNotification = findViewById(R.id.menu_item_notification);
+        menuItemSpeech = findViewById(R.id.menu_item_speech);
+
+        menuItemHome.setSelected(true);
+        menuItemHomeBackground.setSelected(true);
     }
 
     @SuppressLint("RtlHardcoded")
