@@ -1,22 +1,30 @@
 package com.pomac.benayty.view.activities;
 
 import android.os.Bundle;
-import android.view.View;
+import android.view.Gravity;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.ActionMenuItemView;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.Navigation;
 
 import com.pomac.benayty.R;
+import com.pomac.benayty.adapters.DrawerAdapter;
+import com.pomac.benayty.view.DrawerItem;
 import com.pomac.benayty.view.interfaces.AppNavigator;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements AppNavigator {
 
     private TextView pageTitle;
+    private ImageView drawerButton;
     private ImageView back;
+    private DrawerLayout drawerLayout;
+    private ListView drawerListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +32,10 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
         setContentView(R.layout.activity_main);
 
         pageTitle = findViewById(R.id.pageTitle);
+        drawerButton = findViewById(R.id.drawerButton);
         back = findViewById(R.id.back);
+        drawerLayout = findViewById(R.id.drawerLayout);
+        drawerListView = findViewById(R.id.drawerListView);
 
         FrameLayout menuItemHomeBackground = findViewById(R.id.menu_item_home_background);
         FrameLayout menuItemHeartBackground = findViewById(R.id.menu_item_heart_background);
@@ -38,6 +49,18 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
 
         menuItemHome.setSelected(true);
         menuItemHomeBackground.setSelected(true);
+
+        ArrayList<DrawerItem> drawerItems = new ArrayList<>();
+        drawerItems.add(new DrawerItem("الصفحة الرئيسية", R.drawable.home));
+        drawerItems.add(new DrawerItem("إعلاناتي", R.drawable.offer));
+        drawerItems.add(new DrawerItem("التسجيل", R.drawable.persona));
+        drawerItems.add(new DrawerItem("المفضلة", R.drawable.favourite));
+        drawerItems.add(new DrawerItem("اتصل بنا", R.drawable.contact));
+        drawerItems.add(new DrawerItem("تسجيل الدخول / الخروج", R.drawable.loginout));
+        DrawerAdapter adapter = new DrawerAdapter(this, drawerItems);
+        drawerListView.setAdapter(adapter);
+
+        drawerButton.setOnClickListener(l -> drawerLayout.openDrawer(Gravity.RIGHT));
         menuItemHome.setOnClickListener(l -> {
             menuItemHome.setSelected(true);
             menuItemHeart.setSelected(false);
