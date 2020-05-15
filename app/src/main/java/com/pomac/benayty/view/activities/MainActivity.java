@@ -185,14 +185,38 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
 
                 Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.myAdsFragment);
             } else if(item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_wish_list))) {
-                Log.d(Globals.TAG, getResources().getString(R.string.drawer_item_wish_list));
                 drawerLayout.closeDrawer(Gravity.RIGHT);
+
+                menuItemHome.setSelected(false);
+                menuItemHeart.setSelected(true);
+                menuItemNotification.setSelected(false);
+                menuItemSpeech.setSelected(false);
+
+                menuItemHomeBackground.setSelected(false);
+                menuItemHeartBackground.setSelected(true);
+                menuItemNotificationBackground.setSelected(false);
+                menuItemSpeechBackground.setSelected(false);
+
+                Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.wishlistFragment);
             } else if(item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_register))) {
                 Log.d(Globals.TAG, getResources().getString(R.string.drawer_item_register));
                 drawerLayout.closeDrawer(Gravity.RIGHT);
             } else if(item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_contact_us))) {
-                Log.d(Globals.TAG, getResources().getString(R.string.drawer_item_contact_us));
                 drawerLayout.closeDrawer(Gravity.RIGHT);
+
+                menuItemHome.setSelected(false);
+                menuItemHeart.setSelected(false);
+                menuItemNotification.setSelected(false);
+                menuItemSpeech.setSelected(false);
+
+                menuItemHomeBackground.setSelected(false);
+                menuItemHeartBackground.setSelected(false);
+                menuItemNotificationBackground.setSelected(false);
+                menuItemSpeechBackground.setSelected(false);
+
+                pageTitle.setText(getResources().getString(R.string.drawer_item_contact_us));
+
+                Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.contactUsFragment);
             } else if(item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_login_logout))) {
                 Log.d(Globals.TAG, getResources().getString(R.string.drawer_item_login_logout));
                 drawerLayout.closeDrawer(Gravity.RIGHT);

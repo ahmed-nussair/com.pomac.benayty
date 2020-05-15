@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.fragments.ContactUsFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_150sdp"
+            android:src="@drawable/logo"
+            tools:ignore="ContentDescription" />
+
+        <EditText
+            android:id="@+id/contactUsNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:autofillHints="@string/contact_us_name"
+            android:background="@drawable/contact_us_field_background"
+            android:fontFamily="@font/cairo_regular"
+            android:hint="@string/contact_us_name"
+            android:inputType="text"
+            android:padding="@dimen/_13sdp"
+            android:textColor="@color/appColor"
+            android:textColorHint="@color/appColor" />
+
+        <EditText
+            android:id="@+id/contactUsEmailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:autofillHints="@string/contact_us_email"
+            android:background="@drawable/contact_us_field_background"
+            android:fontFamily="@font/cairo_regular"
+            android:hint="@string/contact_us_email"
+            android:inputType="textEmailAddress"
+            android:padding="@dimen/_13sdp"
+            android:textColor="@color/appColor"
+            android:textColorHint="@color/appColor" />
+
+        <EditText
+            android:id="@+id/contactUsPhoneEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:autofillHints="@string/contact_us_phone"
+            android:background="@drawable/contact_us_field_background"
+            android:fontFamily="@font/cairo_regular"
+            android:hint="@string/contact_us_phone"
+            android:inputType="phone"
+            android:padding="@dimen/_13sdp"
+            android:textColor="@color/appColor"
+            android:textColorHint="@color/appColor" />
+
+        <EditText
+            android:id="@+id/contactUsSubjectEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:autofillHints="@string/contact_us_subject"
+            android:background="@drawable/contact_us_field_background"
+            android:fontFamily="@font/cairo_regular"
+            android:hint="@string/contact_us_subject"
+            android:inputType="text"
+            android:padding="@dimen/_13sdp"
+            android:textColor="@color/appColor"
+            android:textColorHint="@color/appColor" />
+
+        <EditText
+            android:id="@+id/contactUsMessageEditText"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_150sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:autofillHints="@string/contact_us_message"
+            android:background="@drawable/contact_us_field_background"
+            android:fontFamily="@font/cairo_regular"
+            android:gravity="top|start"
+            android:hint="@string/contact_us_message"
+            android:inputType="textMultiLine"
+            android:padding="@dimen/_13sdp"
+            android:textColor="@color/appColor"
+            android:textColorHint="@color/appColor" />
+
+        <TextView
+            android:id="@+id/contactUsSendTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:background="@drawable/contact_us_button_background"
+            android:fontFamily="@font/cairo_bold"
+            android:gravity="center"
+            android:padding="@dimen/_13sdp"
+            android:text="@string/contact_us_send"
+            android:textColor="#ffffff" />
+
+    </LinearLayout>
+
+
+</ScrollView>

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
@@ -27,6 +28,7 @@ public class WishlistFragment extends Fragment {
     private AppNavigator navigator;
 
     private RecyclerView wishListRecyclerView;
+    private ProgressBar wishListProgressBar;
 
     public WishlistFragment() {
         // Required empty public constructor
@@ -38,6 +40,7 @@ public class WishlistFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wishlist, container, false);
         wishListRecyclerView = view.findViewById(R.id.wishListRecyclerView);
+        wishListProgressBar = view.findViewById(R.id.wishListProgressBar);
         return view;
     }
 
@@ -55,6 +58,9 @@ public class WishlistFragment extends Fragment {
             WishListAdapter adapter = new WishListAdapter(getContext(), response.getData());
             wishListRecyclerView.setAdapter(adapter);
             wishListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+            wishListProgressBar.setVisibility(View.GONE);
+            wishListRecyclerView.setVisibility(View.VISIBLE);
         });
     }
 }

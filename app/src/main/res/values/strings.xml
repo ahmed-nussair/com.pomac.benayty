@@ -38,4 +38,19 @@
     <string name="drawer_item_contact_us">اتصل بنا</string>
     <string name="drawer_item_login_logout">تسجيل الدخول / الخروج</string>
 
+    <string name="contact_us_name">اسم المستخدم</string>
+    <string name="contact_us_email">البريد الإليكتروني</string>
+    <string name="contact_us_phone">الجوال</string>
+    <string name="contact_us_subject">عنوان الرسالة</string>
+    <string name="contact_us_message">محتوى الرسالة</string>
+    <string name="contact_us_send">إرسال الرسالة</string>
+
+    <string name="enter_your_name">من فضلك أدخل اسمك</string>
+    <string name="enter_your_email">من فضلك أدخل البريد الإليكتروني</string>
+    <string name="enter_valid_email">البريد الإليكتروني غير صالح .. من فضلك أدخل بريد إليكتروني صحيح</string>
+    <string name="enter_your_phone">من فضلك أدخل رقم التليفون</string>
+    <string name="enter_valid_phone">رقم التليفون غير صالح .. من فضلك أدخل رقم تليفون صحيح</string>
+    <string name="enter_subject">من فضلك أدخل عنوان الرسالة</string>
+    <string name="enter_message">من فضلك أدخل عنوان الرسالة</string>
+
 </resources>
