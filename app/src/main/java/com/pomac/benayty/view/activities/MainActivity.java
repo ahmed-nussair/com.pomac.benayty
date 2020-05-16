@@ -1,6 +1,7 @@
 package com.pomac.benayty.view.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -199,8 +200,10 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
 
                 Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.wishlistFragment);
             } else if(item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_register))) {
-                Log.d(Globals.TAG, getResources().getString(R.string.drawer_item_register));
                 drawerLayout.closeDrawer(Gravity.RIGHT);
+
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
             } else if(item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_contact_us))) {
                 drawerLayout.closeDrawer(Gravity.RIGHT);
 

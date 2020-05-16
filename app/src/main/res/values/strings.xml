@@ -31,6 +31,8 @@
     <string name="find_secondary_items">بحث</string>
     <string name="close_dialog">إلغاء</string>
 
+    <string name="check_code">إرسال</string>
+
     <string name="drawer_item_main">الصفحة الرئيسية</string>
     <string name="drawer_item_my_ads">إعلاناتي</string>
     <string name="drawer_item_register">التسجيل</string>
@@ -52,5 +54,31 @@
     <string name="enter_valid_phone">رقم التليفون غير صالح .. من فضلك أدخل رقم تليفون صحيح</string>
     <string name="enter_subject">من فضلك أدخل عنوان الرسالة</string>
     <string name="enter_message">من فضلك أدخل عنوان الرسالة</string>
+
+    <string name="login_field_phone">الجوال</string>
+    <string name="login_field_password">كلمة المرور</string>
+    <string name="login_field_name">الاسم</string>
+    <string name="login_field_email">البريد الإليكتروني</string>
+    <string name="login_field_confirm_password">أعد إدخال كلمة المرور</string>
+
+    <string name="login_button_login">دخول</string>
+    <string name="login_button_register">تسجيل</string>
+    <string name="login_button_update_password">حفظ كلمة المرور</string>
+    <string name="login_button_send_for_password">إرسال</string>
+
+    <string name="forgot_password"><u>هل نسيت كلمة المرور؟</u></string>
+    <string name="register"><u>إنشاء حساب جديد</u></string>
+
+    <string name="login_title_login">تسجيل الدخول</string>
+    <string name="login_title_register">التسجيل</string>
+    <string name="login_title_forgot_password">نسيت كلمة المرور؟</string>
+    <string name="login_title_update_password">استعادة كلمة المرور</string>
+
+    <string name="enter_the_code">أدخل الكود</string>
+    <string name="wrong_code">الكود غير صحيح</string>
+    <string name="no_code_entered">من فضلك أدخل الكود</string>
+    <string name="resend_code">إعادة إرسال الكود</string>
+
+    <string name="checking_code_dialog_title">التأكد من الكود المرسل لك عبر البريد الإلكتروني</string>
 
 </resources>

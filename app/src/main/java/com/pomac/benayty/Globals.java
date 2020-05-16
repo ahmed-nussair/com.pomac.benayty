@@ -96,4 +96,9 @@ public class Globals {
 
         return result;
     }
+
+    /**
+     * Field for reset code
+     */
+    public static final String RESET_CODE = "reset_code";
 }

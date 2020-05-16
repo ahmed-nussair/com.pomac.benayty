@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="rtl"
+    android:orientation="vertical"
+    tools:context=".view.fragments.RegistrationFragment">
+
+    <EditText
+        android:id="@+id/signUpNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_7sdp"
+        android:autofillHints="@string/login_field_name"
+        android:background="@drawable/login_field_background"
+        android:fontFamily="@font/cairo_regular"
+        android:gravity="start"
+        android:hint="@string/login_field_name"
+        android:inputType="text"
+        android:padding="@dimen/_13sdp"
+        android:textColor="@color/appColor"
+        android:textColorHint="@color/appColor" />
+
+    <EditText
+        android:id="@+id/signUpEmailEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_7sdp"
+        android:autofillHints="@string/login_field_email"
+        android:background="@drawable/login_field_background"
+        android:fontFamily="@font/cairo_regular"
+        android:gravity="start"
+        android:hint="@string/login_field_email"
+        android:inputType="textEmailAddress"
+        android:padding="@dimen/_13sdp"
+        android:textColor="@color/appColor"
+        android:textColorHint="@color/appColor" />
+
+    <EditText
+        android:id="@+id/signUpPhoneEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_7sdp"
+        android:autofillHints="@string/login_field_phone"
+        android:background="@drawable/login_field_background"
+        android:fontFamily="@font/cairo_regular"
+        android:gravity="start"
+        android:hint="@string/login_field_phone"
+        android:inputType="phone"
+        android:padding="@dimen/_13sdp"
+        android:textColor="@color/appColor"
+        android:textColorHint="@color/appColor" />
+
+    <EditText
+        android:id="@+id/signUpPasswordEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_7sdp"
+        android:autofillHints="@string/login_field_password"
+        android:background="@drawable/login_field_background"
+        android:fontFamily="@font/cairo_regular"
+        android:gravity="start"
+        android:hint="@string/login_field_password"
+        android:inputType="textPassword"
+        android:padding="@dimen/_13sdp"
+        android:textAlignment="viewStart"
+        android:textColor="@color/appColor"
+        android:textColorHint="@color/appColor" />
+
+    <TextView
+        android:id="@+id/signUpButtonTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_7sdp"
+        android:background="@drawable/login_button_background"
+        android:fontFamily="@font/cairo_bold"
+        android:gravity="center"
+        android:padding="@dimen/_13sdp"
+        android:text="@string/login_button_register"
+        android:textColor="#ffffff" />
+
+</LinearLayout>

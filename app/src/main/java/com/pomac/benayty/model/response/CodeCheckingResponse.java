@@ -1,0 +1,22 @@
+package com.pomac.benayty.model.response;
+
+public class CodeCheckingResponse {
+
+    private int status;
+
+    private String message;
+
+    private String[] errors;
+
+    public int getStatus() {
+        return status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String[] getErrors() {
+        return errors;
+    }
+}

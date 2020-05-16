@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="rtl"
+    android:orientation="vertical"
+    tools:context=".view.fragments.LoginFragment">
+
+    <EditText
+        android:id="@+id/loginPhoneEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_7sdp"
+        android:autofillHints="@string/login_field_phone"
+        android:background="@drawable/login_field_background"
+        android:fontFamily="@font/cairo_regular"
+        android:gravity="start"
+        android:hint="@string/login_field_phone"
+        android:inputType="phone"
+        android:padding="@dimen/_13sdp"
+        android:textColor="@color/appColor"
+        android:textColorHint="@color/appColor" />
+
+    <EditText
+        android:id="@+id/loginPasswordEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_7sdp"
+        android:autofillHints="@string/login_field_password"
+        android:background="@drawable/login_field_background"
+        android:fontFamily="@font/cairo_regular"
+        android:gravity="start"
+        android:hint="@string/login_field_password"
+        android:inputType="textPassword"
+        android:padding="@dimen/_13sdp"
+        android:textAlignment="viewStart"
+        android:textColor="@color/appColor"
+        android:textColorHint="@color/appColor" />
+
+    <TextView
+        android:id="@+id/forgotPasswordLink"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_30sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:fontFamily="@font/cairo_regular"
+        android:gravity="start"
+        android:text="@string/forgot_password"
+        android:textColor="@color/appColor" />
+
+    <TextView
+        android:id="@+id/registerLink"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_30sdp"
+        android:layout_marginEnd="@dimen/_30sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:fontFamily="@font/cairo_regular"
+        android:gravity="start"
+        android:text="@string/register"
+        android:textColor="@color/appColor" />
+
+    <TextView
+        android:id="@+id/loginButtonTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_7sdp"
+        android:background="@drawable/login_button_background"
+        android:fontFamily="@font/cairo_bold"
+        android:gravity="center"
+        android:padding="@dimen/_13sdp"
+        android:text="@string/login_button_login"
+        android:textColor="#ffffff" />
+
+</LinearLayout>

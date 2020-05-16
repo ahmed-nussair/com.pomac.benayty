@@ -1,9 +1,6 @@
 package com.pomac.benayty.view.fragments;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.telephony.PhoneNumberUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +10,22 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
+import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
-import com.pomac.benayty.viewmodel.ContactUsViewModel;
+import com.pomac.benayty.apis.ContactUsApi;
+import com.pomac.benayty.model.response.ContactUsResponse;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
@@ -81,7 +87,6 @@ public class ContactUsFragment extends Fragment {
                 Toast.makeText(getContext(), getString(R.string.enter_message), Toast.LENGTH_LONG).show();
                 return;
             }
-            ContactUsViewModel contactUsViewModel = ViewModelProviders.of(this).get(ContactUsViewModel.class);
 
             Map<String, String> data = new HashMap<>();
 
@@ -91,24 +96,30 @@ public class ContactUsFragment extends Fragment {
             data.put("subject", contactUsSubjectEditText.getText().toString());
             data.put("message", contactUsMessageEditText.getText().toString());
 
-            contactUsViewModel.send(data).observe(getActivity(),
-                    response -> {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                        builder.setCancelable(false);
-                        builder.setTitle(response.getMessage());
-                        builder.setPositiveButton("إغلاق", (dialog, which) -> {
-                            contactUsNameEditText.setText("");
-                            contactUsEmailEditText.setText("");
-                            contactUsPhoneEditText.setText("");
-                            contactUsSubjectEditText.setText("");
-                            contactUsMessageEditText.setText("");
-                            dialog.dismiss();
-                        });
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(Globals.BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .build();
 
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
+            ContactUsApi api = retrofit.create(ContactUsApi.class);
+
+            Observable<ContactUsResponse> observable = api.send(data)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+
+            Disposable disposable = observable.subscribe(
+                    response -> {
+                        contactUsNameEditText.setText("");
+                        contactUsEmailEditText.setText("");
+                        contactUsPhoneEditText.setText("");
+                        contactUsSubjectEditText.setText("");
+                        contactUsMessageEditText.setText("");
+                        Toast.makeText(getActivity(), response.getMessage(), Toast.LENGTH_LONG).show();
                     }
             );
+
+            Globals.compositeDisposable.add(disposable);
         });
     }
 }
