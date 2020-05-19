@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -23,7 +22,6 @@ import com.pomac.benayty.view.DrawerItem;
 import com.pomac.benayty.view.interfaces.AppNavigator;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements AppNavigator {
 
@@ -55,65 +53,18 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
 
         attachListenersForViews();
 
+        navigateToMainPage();
+
     }
 
     private void attachListenersForViews() {
-        menuItemHome.setOnClickListener(l -> {
-            menuItemHome.setSelected(true);
-            menuItemHeart.setSelected(false);
-            menuItemNotification.setSelected(false);
-            menuItemSpeech.setSelected(false);
+        menuItemHome.setOnClickListener(l -> navigateToMainPage());
 
-            menuItemHomeBackground.setSelected(true);
-            menuItemHeartBackground.setSelected(false);
-            menuItemNotificationBackground.setSelected(false);
-            menuItemSpeechBackground.setSelected(false);
+        menuItemHeart.setOnClickListener(l -> navigateToWishListPage());
 
-            Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.mainFragment);
-        });
+        menuItemNotification.setOnClickListener(l -> navigateToNotificationsPage());
 
-        menuItemHeart.setOnClickListener(l -> {
-            menuItemHome.setSelected(false);
-            menuItemHeart.setSelected(true);
-            menuItemNotification.setSelected(false);
-            menuItemSpeech.setSelected(false);
-
-            menuItemHomeBackground.setSelected(false);
-            menuItemHeartBackground.setSelected(true);
-            menuItemNotificationBackground.setSelected(false);
-            menuItemSpeechBackground.setSelected(false);
-
-            Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.wishlistFragment);
-        });
-
-        menuItemNotification.setOnClickListener(l -> {
-
-            menuItemHome.setSelected(false);
-            menuItemHeart.setSelected(false);
-            menuItemNotification.setSelected(true);
-            menuItemSpeech.setSelected(false);
-
-            menuItemHomeBackground.setSelected(false);
-            menuItemHeartBackground.setSelected(false);
-            menuItemNotificationBackground.setSelected(true);
-            menuItemSpeechBackground.setSelected(false);
-
-            Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.notificationFragment);
-        });
-
-        menuItemSpeech.setOnClickListener(l -> {
-            menuItemHome.setSelected(false);
-            menuItemHeart.setSelected(false);
-            menuItemNotification.setSelected(false);
-            menuItemSpeech.setSelected(true);
-
-            menuItemHomeBackground.setSelected(false);
-            menuItemHeartBackground.setSelected(false);
-            menuItemNotificationBackground.setSelected(false);
-            menuItemSpeechBackground.setSelected(true);
-
-            Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.messagesFragment);
-        });
+        menuItemSpeech.setOnClickListener(l -> navigateToMessagesPage());
     }
 
     private void initViews() {
@@ -157,70 +108,26 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
 
                 drawerLayout.closeDrawer(Gravity.RIGHT);
 
-                menuItemHome.setSelected(true);
-                menuItemHeart.setSelected(false);
-                menuItemNotification.setSelected(false);
-                menuItemSpeech.setSelected(false);
+                navigateToMainPage();
 
-                menuItemHomeBackground.setSelected(true);
-                menuItemHeartBackground.setSelected(false);
-                menuItemNotificationBackground.setSelected(false);
-                menuItemSpeechBackground.setSelected(false);
-
-                Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.mainFragment);
-
-            } else if(item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_my_ads))) {
+            } else if (item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_my_ads))) {
                 drawerLayout.closeDrawer(Gravity.RIGHT);
 
-                menuItemHome.setSelected(false);
-                menuItemHeart.setSelected(false);
-                menuItemNotification.setSelected(false);
-                menuItemSpeech.setSelected(false);
-
-                menuItemHomeBackground.setSelected(false);
-                menuItemHeartBackground.setSelected(false);
-                menuItemNotificationBackground.setSelected(false);
-                menuItemSpeechBackground.setSelected(false);
-
-                pageTitle.setText(getResources().getString(R.string.drawer_item_my_ads));
-
-                Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.myAdsFragment);
-            } else if(item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_wish_list))) {
+                navigateToMyAdsPage();
+            } else if (item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_wish_list))) {
                 drawerLayout.closeDrawer(Gravity.RIGHT);
 
-                menuItemHome.setSelected(false);
-                menuItemHeart.setSelected(true);
-                menuItemNotification.setSelected(false);
-                menuItemSpeech.setSelected(false);
-
-                menuItemHomeBackground.setSelected(false);
-                menuItemHeartBackground.setSelected(true);
-                menuItemNotificationBackground.setSelected(false);
-                menuItemSpeechBackground.setSelected(false);
-
-                Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.wishlistFragment);
-            } else if(item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_register))) {
+                navigateToWishListPage();
+            } else if (item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_register))) {
                 drawerLayout.closeDrawer(Gravity.RIGHT);
 
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
-            } else if(item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_contact_us))) {
+            } else if (item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_contact_us))) {
                 drawerLayout.closeDrawer(Gravity.RIGHT);
 
-                menuItemHome.setSelected(false);
-                menuItemHeart.setSelected(false);
-                menuItemNotification.setSelected(false);
-                menuItemSpeech.setSelected(false);
-
-                menuItemHomeBackground.setSelected(false);
-                menuItemHeartBackground.setSelected(false);
-                menuItemNotificationBackground.setSelected(false);
-                menuItemSpeechBackground.setSelected(false);
-
-                pageTitle.setText(getResources().getString(R.string.drawer_item_contact_us));
-
-                Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.contactUsFragment);
-            } else if(item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_login_logout))) {
+                navigateToContactUsPage();
+            } else if (item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_login_logout))) {
                 Log.d(Globals.TAG, getResources().getString(R.string.drawer_item_login_logout));
                 drawerLayout.closeDrawer(Gravity.RIGHT);
             }
@@ -229,21 +136,7 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
     }
 
     @Override
-    public void setTitle(String title) {
-        pageTitle.setText(title);
-    }
-
-    @Override
-    public void navigateToOtherPage() {
-        FrameLayout menuItemHomeBackground = findViewById(R.id.menu_item_home_background);
-        FrameLayout menuItemHeartBackground = findViewById(R.id.menu_item_heart_background);
-        FrameLayout menuItemNotificationBackground = findViewById(R.id.menu_item_notification_background);
-        FrameLayout menuItemSpeechBackground = findViewById(R.id.menu_item_speech_background);
-
-        ImageView menuItemHome = findViewById(R.id.menu_item_home);
-        ImageView menuItemHeart = findViewById(R.id.menu_item_heart);
-        ImageView menuItemNotification = findViewById(R.id.menu_item_notification);
-        ImageView menuItemSpeech = findViewById(R.id.menu_item_speech);
+    public void navigateToMainCategoryPage(int mainCategoryId, String mainCategoryName) {
 
         menuItemHome.setSelected(false);
         menuItemHeart.setSelected(false);
@@ -254,6 +147,205 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
         menuItemHeartBackground.setSelected(false);
         menuItemNotificationBackground.setSelected(false);
         menuItemSpeechBackground.setSelected(false);
+
+        pageTitle.setText(mainCategoryName);
+
+        Bundle mainCategoryBundle = new Bundle();
+        mainCategoryBundle.putInt(Globals.MAIN_CATEGORY_ID, mainCategoryId);
+        mainCategoryBundle.putString(Globals.MAIN_CATEGORY_NAME, mainCategoryName);
+
+        Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.mainCategoryFragment, mainCategoryBundle);
+
+        back.setVisibility(View.VISIBLE);
+        back.setOnClickListener(v -> {
+            navigateToMainPage();
+            back.setVisibility(View.GONE);
+        });
+    }
+
+    @Override
+    public void navigateToSearchResults(int mainCategoryId, int secondaryCategoryId, int areaId, int cityId, Bundle bundle) {
+        menuItemHome.setSelected(false);
+        menuItemHeart.setSelected(false);
+        menuItemNotification.setSelected(false);
+        menuItemSpeech.setSelected(false);
+
+        menuItemHomeBackground.setSelected(false);
+        menuItemHeartBackground.setSelected(false);
+        menuItemNotificationBackground.setSelected(false);
+        menuItemSpeechBackground.setSelected(false);
+
+        pageTitle.setText("نتائج البحث");
+
+        Bundle searchResultsBundle = new Bundle();
+        searchResultsBundle.putInt(Globals.MAIN_CATEGORY_ID, mainCategoryId);
+        searchResultsBundle.putInt(Globals.SECONDARY_CATEGORY_ID, secondaryCategoryId);
+        searchResultsBundle.putInt(Globals.AREA_ID, areaId);
+        searchResultsBundle.putInt(Globals.CITY_ID, cityId);
+
+        Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.searchResultsFragment, searchResultsBundle);
+
+        back.setVisibility(View.VISIBLE);
+        back.setOnClickListener(v -> {
+
+            int id = bundle.getInt(Globals.MAIN_CATEGORY_ID);
+            String name = bundle.getString(Globals.MAIN_CATEGORY_NAME);
+
+            navigateToMainCategoryPage(id, name);
+
+        });
+    }
+
+    @Override
+    public void navigateToAdDetails(int adId, String adName) {
+        menuItemHome.setSelected(false);
+        menuItemHeart.setSelected(false);
+        menuItemNotification.setSelected(false);
+        menuItemSpeech.setSelected(false);
+
+        menuItemHomeBackground.setSelected(false);
+        menuItemHeartBackground.setSelected(false);
+        menuItemNotificationBackground.setSelected(false);
+        menuItemSpeechBackground.setSelected(false);
+
+        Bundle detailsFragmentBundle = new Bundle();
+
+        detailsFragmentBundle.putInt(Globals.AD_ID, adId);
+        pageTitle.setText(adName);
+
+        Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.adDetailsFragment, detailsFragmentBundle);
+    }
+
+    @Override
+    public void navigateToAdDetails(int adId, String adName, Bundle bundle) {
+        menuItemHome.setSelected(false);
+        menuItemHeart.setSelected(false);
+        menuItemNotification.setSelected(false);
+        menuItemSpeech.setSelected(false);
+
+        menuItemHomeBackground.setSelected(false);
+        menuItemHeartBackground.setSelected(false);
+        menuItemNotificationBackground.setSelected(false);
+        menuItemSpeechBackground.setSelected(false);
+
+        Bundle detailsFragmentBundle = new Bundle();
+
+        detailsFragmentBundle.putInt(Globals.AD_ID, adId);
+        pageTitle.setText(adName);
+
+        Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.adDetailsFragment, detailsFragmentBundle);
+
+        back.setVisibility(View.GONE);
+//
+//        back.setVisibility(View.VISIBLE);
+//        back.setOnClickListener(v -> {
+//            n;
+//            back.setVisibility(View.GONE);
+//        });
+    }
+
+    @Override
+    public void navigateToMainPage() {
+
+        menuItemHome.setSelected(true);
+        menuItemHeart.setSelected(false);
+        menuItemNotification.setSelected(false);
+        menuItemSpeech.setSelected(false);
+
+        menuItemHomeBackground.setSelected(true);
+        menuItemHeartBackground.setSelected(false);
+        menuItemNotificationBackground.setSelected(false);
+        menuItemSpeechBackground.setSelected(false);
+
+        pageTitle.setText(getString(R.string.home_page_title));
+
+        Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.mainFragment);
+
+    }
+
+    @Override
+    public void navigateToWishListPage() {
+        menuItemHome.setSelected(false);
+        menuItemHeart.setSelected(true);
+        menuItemNotification.setSelected(false);
+        menuItemSpeech.setSelected(false);
+
+        menuItemHomeBackground.setSelected(false);
+        menuItemHeartBackground.setSelected(true);
+        menuItemNotificationBackground.setSelected(false);
+        menuItemSpeechBackground.setSelected(false);
+
+        pageTitle.setText(getResources().getString(R.string.drawer_item_wish_list));
+
+        Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.wishlistFragment);
+    }
+
+    @Override
+    public void navigateToNotificationsPage() {
+        menuItemHome.setSelected(false);
+        menuItemHeart.setSelected(false);
+        menuItemNotification.setSelected(true);
+        menuItemSpeech.setSelected(false);
+
+        menuItemHomeBackground.setSelected(false);
+        menuItemHeartBackground.setSelected(false);
+        menuItemNotificationBackground.setSelected(true);
+        menuItemSpeechBackground.setSelected(false);
+
+        pageTitle.setText(getResources().getString(R.string.notifications_page_title));
+
+        Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.notificationFragment);
+    }
+
+    @Override
+    public void navigateToMessagesPage() {
+        menuItemHome.setSelected(false);
+        menuItemHeart.setSelected(false);
+        menuItemNotification.setSelected(false);
+        menuItemSpeech.setSelected(true);
+
+        menuItemHomeBackground.setSelected(false);
+        menuItemHeartBackground.setSelected(false);
+        menuItemNotificationBackground.setSelected(false);
+        menuItemSpeechBackground.setSelected(true);
+
+        pageTitle.setText(getResources().getString(R.string.messages_page_title));
+
+        Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.messagesFragment);
+    }
+
+    @Override
+    public void navigateToMyAdsPage() {
+        menuItemHome.setSelected(false);
+        menuItemHeart.setSelected(false);
+        menuItemNotification.setSelected(false);
+        menuItemSpeech.setSelected(false);
+
+        menuItemHomeBackground.setSelected(false);
+        menuItemHeartBackground.setSelected(false);
+        menuItemNotificationBackground.setSelected(false);
+        menuItemSpeechBackground.setSelected(false);
+
+        pageTitle.setText(getResources().getString(R.string.drawer_item_my_ads));
+
+        Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.myAdsFragment);
+    }
+
+    @Override
+    public void navigateToContactUsPage() {
+        menuItemHome.setSelected(false);
+        menuItemHeart.setSelected(false);
+        menuItemNotification.setSelected(false);
+        menuItemSpeech.setSelected(false);
+
+        menuItemHomeBackground.setSelected(false);
+        menuItemHeartBackground.setSelected(false);
+        menuItemNotificationBackground.setSelected(false);
+        menuItemSpeechBackground.setSelected(false);
+
+        pageTitle.setText(getResources().getString(R.string.drawer_item_contact_us));
+
+        Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.contactUsFragment);
     }
 
     @Override

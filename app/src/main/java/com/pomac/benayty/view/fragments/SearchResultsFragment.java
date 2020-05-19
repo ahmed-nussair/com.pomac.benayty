@@ -15,18 +15,22 @@ import android.view.ViewGroup;
 import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
 import com.pomac.benayty.adapters.AdsAdapter;
+import com.pomac.benayty.view.interfaces.AppNavigator;
+import com.pomac.benayty.view.interfaces.OnAdItemSelected;
 import com.pomac.benayty.viewmodel.AdsViewModel;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SearchResultsFragment extends Fragment {
+public class SearchResultsFragment extends Fragment implements OnAdItemSelected {
 
     private int mainCategoryId;
     private int secondaryCategoryId;
     private int areaId;
     private int cityId;
+
+    private AppNavigator navigator;
 
     private RecyclerView searchResultsRecyclerView;
     public SearchResultsFragment() {
@@ -54,15 +58,26 @@ public class SearchResultsFragment extends Fragment {
         cityId = getArguments().getInt(Globals.CITY_ID);
 
         assert getActivity() != null;
+        navigator = (AppNavigator) getActivity();
 
         AdsViewModel adsViewModel = ViewModelProviders.of(this).get(AdsViewModel.class);
 
         adsViewModel.getAdsList(mainCategoryId, secondaryCategoryId, areaId, cityId).observe(
                 getActivity(), response -> {
-                    AdsAdapter adapter = new AdsAdapter(getActivity(), response.getData());
+                    AdsAdapter adapter = new AdsAdapter(getActivity(), response.getData(), this);
                     searchResultsRecyclerView.setAdapter(adapter);
                     searchResultsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 }
         );
+    }
+
+    @Override
+    public void onItemSelected(int adId, String adName) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(Globals.MAIN_CATEGORY_ID, mainCategoryId);
+        bundle.putInt(Globals.SECONDARY_CATEGORY_ID, secondaryCategoryId);
+        bundle.putInt(Globals.AREA_ID, areaId);
+        bundle.putInt(Globals.CITY_ID, cityId);
+        navigator.navigateToAdDetails(adId, adName, bundle);
     }
 }

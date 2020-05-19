@@ -16,16 +16,20 @@ import android.widget.ProgressBar;
 import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
 import com.pomac.benayty.adapters.MyAdsAdapter;
+import com.pomac.benayty.view.interfaces.AppNavigator;
+import com.pomac.benayty.view.interfaces.OnAdItemSelected;
 import com.pomac.benayty.viewmodel.MyAdsViewModel;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyAdsFragment extends Fragment {
+public class MyAdsFragment extends Fragment implements OnAdItemSelected {
 
     private RecyclerView myAdsRecyclerView;
     private ProgressBar myAdsProgressBar;
+
+    private AppNavigator navigator;
 
     public MyAdsFragment() {
         // Required empty public constructor
@@ -47,14 +51,21 @@ public class MyAdsFragment extends Fragment {
 
         assert getActivity() != null;
 
+        navigator = (AppNavigator) getActivity();
+
         MyAdsViewModel myAdsViewModel = ViewModelProviders.of(this).get(MyAdsViewModel.class);
 
         myAdsViewModel.getMyAds(Globals.token).observe(getActivity(), response -> {
-            MyAdsAdapter adapter = new MyAdsAdapter(getActivity(), response.getData());
+            MyAdsAdapter adapter = new MyAdsAdapter(getActivity(), response.getData(), this);
             myAdsRecyclerView.setAdapter(adapter);
             myAdsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             myAdsProgressBar.setVisibility(View.GONE);
             myAdsRecyclerView.setVisibility(View.VISIBLE);
         });
+    }
+
+    @Override
+    public void onItemSelected(int adId, String adName) {
+        navigator.navigateToAdDetails(adId, adName);
     }
 }

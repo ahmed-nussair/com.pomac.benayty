@@ -38,7 +38,7 @@ public class MessagesFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         assert getActivity() != null;
+
         navigator = (AppNavigator) getActivity();
-        navigator.setTitle(getResources().getString(R.string.messages_page_title));
     }
 }

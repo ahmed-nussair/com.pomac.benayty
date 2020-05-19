@@ -101,4 +101,9 @@ public class Globals {
      * Field for reset code
      */
     public static final String RESET_CODE = "reset_code";
+
+    /**
+     * Field for advertisement id
+     */
+    public static final String AD_ID = "ad_id";
 }

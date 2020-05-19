@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
 import com.pomac.benayty.model.WishListItem;
+import com.pomac.benayty.view.interfaces.OnAdItemSelected;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
@@ -28,10 +30,12 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.WishLi
 
     private Context context;
     private List<WishListItem> wishList;
+    private OnAdItemSelected onAdItemSelected;
 
-    public WishListAdapter(Context context, List<WishListItem> wishList) {
+    public WishListAdapter(Context context, List<WishListItem> wishList, OnAdItemSelected onAdItemSelected) {
         this.context = context;
         this.wishList = wishList;
+        this.onAdItemSelected = onAdItemSelected;
     }
 
     @NonNull
@@ -55,6 +59,11 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.WishLi
                 .fit()
                 .transform(transformation)
                 .into(holder.adImageView);
+
+        holder.adItemRelativeLayout.setOnClickListener(v -> onAdItemSelected.onItemSelected(
+                wishList.get(position).getAdvertisement().getId(),
+                wishList.get(position).getAdvertisement().getTitle()
+        ));
         try {
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
@@ -73,12 +82,14 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.WishLi
 
     static class WishListViewHolder extends RecyclerView.ViewHolder {
 
+        RelativeLayout adItemRelativeLayout;
         ImageView adImageView;
         TextView adNameTextView;
         TextView adUserNameTextView;
         TextView adCreationTimeTextView;
         WishListViewHolder(@NonNull View itemView) {
             super(itemView);
+            adItemRelativeLayout = itemView.findViewById(R.id.adItemRelativeLayout);
             adImageView = itemView.findViewById(R.id.adImageView);
             adNameTextView = itemView.findViewById(R.id.adNameTextView);
             adUserNameTextView = itemView.findViewById(R.id.adUserNameTextView);

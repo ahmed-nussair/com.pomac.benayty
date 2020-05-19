@@ -45,4 +45,9 @@
         android:name="com.pomac.benayty.view.fragments.ContactUsFragment"
         android:label="fragment_contact_us"
         tools:layout="@layout/fragment_contact_us" />
+    <fragment
+        android:id="@+id/adDetailsFragment"
+        android:name="com.pomac.benayty.view.fragments.AdDetailsFragment"
+        android:label="fragment_ad_details"
+        tools:layout="@layout/fragment_ad_details" />
 </navigation>

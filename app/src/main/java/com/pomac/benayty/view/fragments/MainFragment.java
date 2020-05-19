@@ -51,7 +51,6 @@ public class MainFragment extends Fragment implements OnMainCategorySelected {
         assert getActivity() != null;
 
         navigator = (AppNavigator) getActivity();
-        navigator.setTitle(getResources().getString(R.string.home_page_title));
 
         Animation progressBarAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.progress);
         progressBarAnimation.setDuration(1000);
@@ -79,11 +78,7 @@ public class MainFragment extends Fragment implements OnMainCategorySelected {
 
     @Override
     public void onMainCategorySelected(int mainCategoryId, String mainCategoryName) {
-        assert getActivity() != null;
-        Bundle bundle = new Bundle();
-        bundle.putInt(Globals.MAIN_CATEGORY_ID, mainCategoryId);
-        bundle.putString(Globals.MAIN_CATEGORY_NAME, mainCategoryName);
-        Navigation.findNavController(getActivity().findViewById(R.id.nav_host)).navigate(R.id.mainCategoryFragment, bundle);
-        navigator.navigateToOtherPage();
+
+        navigator.navigateToMainCategoryPage(mainCategoryId, mainCategoryName);
     }
 }

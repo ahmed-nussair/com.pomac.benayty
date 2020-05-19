@@ -10,6 +10,7 @@
 
 
     <RelativeLayout
+        android:id="@+id/adItemRelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_100sdp"
         android:background="#ffffff">

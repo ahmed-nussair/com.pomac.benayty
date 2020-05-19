@@ -17,11 +17,20 @@
         android:fontFamily="@font/cairo_bold"
         android:layout_gravity="center" />
 
+    <ProgressBar
+        android:id="@+id/fieldDialogProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:indeterminateDrawable="@drawable/progress" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fieldRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/submitButton"

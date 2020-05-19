@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,6 +42,7 @@ public class MainCategoryFieldDialog extends Dialog implements
     private Fragment fragment;
     private AdFilter adFilter;
     private MainCategoryFieldType type;
+    private ProgressBar fieldDialogProgressBar;
 
     public MainCategoryFieldDialog(@NonNull Context context, int themeResId,
                                    Fragment fragment, AdFilter adFilter,
@@ -60,6 +63,7 @@ public class MainCategoryFieldDialog extends Dialog implements
         dialogTitle = findViewById(R.id.dialogTitle);
         fieldRecyclerView = findViewById(R.id.fieldRecyclerView);
         submitButton = findViewById(R.id.submitButton);
+        fieldDialogProgressBar = findViewById(R.id.fieldDialogProgressBar);
         submitButton.setOnClickListener(l -> this.dismiss());
 
         switch (type){
@@ -72,6 +76,9 @@ public class MainCategoryFieldDialog extends Dialog implements
                     SecondaryCategoriesAdapter adapter = new SecondaryCategoriesAdapter(fragment.getContext(), response.getData(), this);
                     fieldRecyclerView.setAdapter(adapter);
                     fieldRecyclerView.setLayoutManager(new LinearLayoutManager(fragment.getContext()));
+
+                    fieldDialogProgressBar.setVisibility(View.GONE);
+                    fieldRecyclerView.setVisibility(View.VISIBLE);
                 });
                 break;
             case AreaField:
@@ -82,6 +89,9 @@ public class MainCategoryFieldDialog extends Dialog implements
                             AreasAdapter adapter = new AreasAdapter(fragment.getContext(), response.getData(), this);
                             fieldRecyclerView.setAdapter(adapter);
                             fieldRecyclerView.setLayoutManager(new LinearLayoutManager(fragment.getContext()));
+
+                            fieldDialogProgressBar.setVisibility(View.GONE);
+                            fieldRecyclerView.setVisibility(View.VISIBLE);
                         });
                 break;
             case CityField:
@@ -92,6 +102,9 @@ public class MainCategoryFieldDialog extends Dialog implements
                     CitiesAdapter adapter = new CitiesAdapter(fragment.getContext(), response.getData(), this);
                     fieldRecyclerView.setAdapter(adapter);
                     fieldRecyclerView.setLayoutManager(new LinearLayoutManager(fragment.getContext()));
+
+                    fieldDialogProgressBar.setVisibility(View.GONE);
+                    fieldRecyclerView.setVisibility(View.VISIBLE);
                 });
                 break;
         }

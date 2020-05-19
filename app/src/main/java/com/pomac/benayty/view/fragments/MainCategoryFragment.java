@@ -25,12 +25,12 @@ import com.pomac.benayty.view.interfaces.AppNavigator;
  */
 public class MainCategoryFragment extends Fragment implements AdFilter{
 
-    private String mainCategoryTitle;
-
     private int mainCategoryId;
     private int secondaryCategoryId;
     private int areaId;
     private int cityId;
+
+    private String mainCategoryName;
 
     private AppNavigator navigator;
 
@@ -46,8 +46,6 @@ public class MainCategoryFragment extends Fragment implements AdFilter{
         secondaryCategoryId = -1;
         areaId = -1;
         cityId = -1;
-
-        mainCategoryTitle = "";
     }
 
 
@@ -69,11 +67,10 @@ public class MainCategoryFragment extends Fragment implements AdFilter{
         assert getArguments() != null;
 
         mainCategoryId = getArguments().getInt(Globals.MAIN_CATEGORY_ID, 0);
-        mainCategoryTitle = getArguments().getString(Globals.MAIN_CATEGORY_NAME);
+        mainCategoryName = getArguments().getString(Globals.MAIN_CATEGORY_NAME);
 
         assert getActivity() != null;
         navigator = (AppNavigator) getActivity();
-        navigator.setTitle(mainCategoryTitle);
 
         secondaryCategoryField.setOnClickListener(l -> {
             MainCategoryFieldDialog dialog = new MainCategoryFieldDialog
@@ -108,11 +105,9 @@ public class MainCategoryFragment extends Fragment implements AdFilter{
 
             Bundle bundle = new Bundle();
             bundle.putInt(Globals.MAIN_CATEGORY_ID, mainCategoryId);
-            bundle.putString(Globals.MAIN_CATEGORY_NAME, mainCategoryTitle);
-            bundle.putInt(Globals.SECONDARY_CATEGORY_ID, secondaryCategoryId);
-            bundle.putInt(Globals.AREA_ID, areaId);
-            bundle.putInt(Globals.CITY_ID, cityId);
-            Navigation.findNavController(getActivity().findViewById(R.id.nav_host)).navigate(R.id.searchResultsFragment, bundle);
+            bundle.putString(Globals.MAIN_CATEGORY_NAME, mainCategoryName);
+
+            navigator.navigateToSearchResults(mainCategoryId, secondaryCategoryId, areaId, cityId, bundle);
         });
     }
 

@@ -38,6 +38,5 @@ public class NotificationFragment extends Fragment {
 
         assert getActivity() != null;
         navigator = (AppNavigator) getActivity();
-        navigator.setTitle(getResources().getString(R.string.notifications_page_title));
     }
 }

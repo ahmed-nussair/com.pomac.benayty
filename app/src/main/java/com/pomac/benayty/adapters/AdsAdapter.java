@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
 import com.pomac.benayty.model.Advertisement;
+import com.pomac.benayty.view.interfaces.OnAdItemSelected;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
@@ -30,10 +32,12 @@ public class AdsAdapter extends RecyclerView.Adapter<AdsAdapter.AdsViewHolder> {
 
     private Context context;
     private List<Advertisement> ads;
+    private OnAdItemSelected onAdItemSelected;
 
-    public AdsAdapter(Context context, List<Advertisement> ads) {
+    public AdsAdapter(Context context, List<Advertisement> ads, OnAdItemSelected onAdItemSelected) {
         this.context = context;
         this.ads = ads;
+        this.onAdItemSelected = onAdItemSelected;
     }
 
     @NonNull
@@ -63,6 +67,12 @@ public class AdsAdapter extends RecyclerView.Adapter<AdsAdapter.AdsViewHolder> {
                     .fit()
                     .transform(transformation)
                     .into(holder.adImageView);
+
+            holder.adItemRelativeLayout.setOnClickListener
+                    (v -> onAdItemSelected.onItemSelected
+                            (ads.get(position).getId(),
+                                    ads.get(position).getTitle())
+                    );
         } catch (Exception e) {
             Log.e(Globals.TAG, Objects.requireNonNull(e.getMessage()));
         }
@@ -75,12 +85,14 @@ public class AdsAdapter extends RecyclerView.Adapter<AdsAdapter.AdsViewHolder> {
 
     static class AdsViewHolder extends RecyclerView.ViewHolder {
 
+        RelativeLayout adItemRelativeLayout;
         RoundedImageView adImageView;
         TextView adNameTextView;
         TextView adUserNameTextView;
         TextView adCreationTimeTextView;
         AdsViewHolder(@NonNull View itemView) {
             super(itemView);
+            adItemRelativeLayout = itemView.findViewById(R.id.adItemRelativeLayout);
             adImageView = itemView.findViewById(R.id.adImageView);
             adNameTextView = itemView.findViewById(R.id.adNameTextView);
             adUserNameTextView = itemView.findViewById(R.id.adUserNameTextView);

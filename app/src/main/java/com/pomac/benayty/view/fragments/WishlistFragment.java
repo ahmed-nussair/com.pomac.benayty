@@ -17,13 +17,14 @@ import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
 import com.pomac.benayty.adapters.WishListAdapter;
 import com.pomac.benayty.view.interfaces.AppNavigator;
+import com.pomac.benayty.view.interfaces.OnAdItemSelected;
 import com.pomac.benayty.viewmodel.WishListViewModel;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class WishlistFragment extends Fragment {
+public class WishlistFragment extends Fragment implements OnAdItemSelected {
 
     private AppNavigator navigator;
 
@@ -50,17 +51,21 @@ public class WishlistFragment extends Fragment {
 
         assert getActivity() != null;
         navigator = (AppNavigator) getActivity();
-        navigator.setTitle(getResources().getString(R.string.wish_list_page_title));
 
         WishListViewModel viewModel = ViewModelProviders.of(this).get(WishListViewModel.class);
 
         viewModel.getWishList(Globals.token).observe(getActivity(), response -> {
-            WishListAdapter adapter = new WishListAdapter(getContext(), response.getData());
+            WishListAdapter adapter = new WishListAdapter(getContext(), response.getData(), this);
             wishListRecyclerView.setAdapter(adapter);
             wishListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
             wishListProgressBar.setVisibility(View.GONE);
             wishListRecyclerView.setVisibility(View.VISIBLE);
         });
+    }
+
+    @Override
+    public void onItemSelected(int adId, String adName) {
+        navigator.navigateToAdDetails(adId, adName);
     }
 }
