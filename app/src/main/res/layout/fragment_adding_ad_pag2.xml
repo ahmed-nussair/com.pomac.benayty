@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".view.fragments.AddingAdPag2Fragment">
+
+    <LinearLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/resizer"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_100sdp"
+            android:background="#ffffff"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:fontFamily="@font/cairo_bold"
+            android:gravity="start"
+            android:text="@string/adding_ad_name"
+            android:textColor="@color/appColor" />
+
+        <EditText
+            android:id="@+id/addingAdNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:autofillHints="@string/adding_ad_name"
+            android:background="@drawable/contact_us_field_background"
+            android:fontFamily="@font/cairo_regular"
+            android:hint="@string/adding_ad_name"
+            android:inputType="text"
+            android:padding="@dimen/_10sdp"
+            android:textColor="@color/appColor"
+            android:textColorHint="@color/appColor" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:fontFamily="@font/cairo_bold"
+            android:gravity="start"
+            android:text="@string/adding_ad_mobile"
+            android:textColor="@color/appColor" />
+
+        <EditText
+            android:id="@+id/addingAdMobileEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:autofillHints="@string/adding_ad_mobile"
+            android:background="@drawable/contact_us_field_background"
+            android:fontFamily="@font/cairo_regular"
+            android:hint="@string/adding_ad_mobile"
+            android:inputType="phone"
+            android:padding="@dimen/_10sdp"
+            android:textColor="@color/appColor"
+            android:textColorHint="@color/appColor" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:fontFamily="@font/cairo_bold"
+            android:gravity="start"
+            android:text="@string/adding_ad_description"
+            android:textColor="@color/appColor" />
+
+        <EditText
+            android:id="@+id/addingAdDescriptionEditText"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_80sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:autofillHints="@string/adding_ad_description"
+            android:background="@drawable/contact_us_field_background"
+            android:fontFamily="@font/cairo_regular"
+            android:gravity="start"
+            android:hint="@string/adding_ad_description"
+            android:inputType="textMultiLine"
+            android:padding="@dimen/_10sdp"
+            android:textColor="@color/appColor"
+            android:textColorHint="@color/appColor" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:fontFamily="@font/cairo_bold"
+            android:gravity="start"
+            android:text="@string/adding_ad_image"
+            android:textColor="@color/appColor" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:background="@drawable/contact_us_field_background"
+            android:padding="@dimen/_10sdp">
+
+            <ImageView
+                android:id="@+id/addingImageButtonImageView"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/_5sdp"
+                android:src="@drawable/add_image"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/adProposedImageView"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                tools:ignore="ContentDescription" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/addingAddSubmitButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_80sdp"
+            android:layout_marginTop="@dimen/_50sdp"
+            android:layout_marginEnd="@dimen/_80sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            android:background="@drawable/search_button_background"
+            android:fontFamily="@font/cairo_bold"
+            android:gravity="center"
+            android:padding="@dimen/_5sdp"
+            android:text="@string/adding_ad_submit"
+            android:textColor="#ffffff" />
+
+
+    </LinearLayout>
+
+
+</ScrollView>

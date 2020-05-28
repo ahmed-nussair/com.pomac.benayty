@@ -50,4 +50,14 @@
         android:name="com.pomac.benayty.view.fragments.AdDetailsFragment"
         android:label="fragment_ad_details"
         tools:layout="@layout/fragment_ad_details" />
+    <fragment
+        android:id="@+id/addingAdPag1Fragment"
+        android:name="com.pomac.benayty.view.fragments.AddingAdPag1Fragment"
+        android:label="fragment_adding_ad_pag1"
+        tools:layout="@layout/fragment_adding_ad_pag1" />
+    <fragment
+        android:id="@+id/addingAdPag2Fragment"
+        android:name="com.pomac.benayty.view.fragments.AddingAdPag2Fragment"
+        android:label="fragment_adding_ad_pag2"
+        tools:layout="@layout/fragment_adding_ad_pag2" />
 </navigation>

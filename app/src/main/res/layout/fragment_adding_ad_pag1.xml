@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.fragments.AddingAdPag1Fragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:fontFamily="@font/cairo_bold"
+            android:gravity="start"
+            android:text="@string/adding_ad_main_category"
+            android:textColor="@color/appColor" />
+
+        <TextView
+            android:id="@+id/mainCategoryAdField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_30sdp"
+            android:background="@drawable/main_category_field_background"
+            android:fontFamily="@font/cairo_regular"
+            android:gravity="start"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/adding_ad_main_category"
+            android:textColor="@color/appColor" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:fontFamily="@font/cairo_bold"
+            android:gravity="start"
+            android:text="@string/adding_ad_secondary_category"
+            android:textColor="@color/appColor" />
+
+        <TextView
+            android:id="@+id/secondaryCategoryAdField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_30sdp"
+            android:background="@drawable/main_category_field_background"
+            android:fontFamily="@font/cairo_regular"
+            android:gravity="start"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/adding_ad_secondary_category"
+            android:textColor="@color/appColor" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:fontFamily="@font/cairo_bold"
+            android:gravity="start"
+            android:text="@string/adding_ad_area"
+            android:textColor="@color/appColor" />
+
+        <TextView
+            android:id="@+id/areaAdField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_30sdp"
+            android:background="@drawable/main_category_field_background"
+            android:fontFamily="@font/cairo_regular"
+            android:gravity="start"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/adding_ad_area"
+            android:textColor="@color/appColor" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:fontFamily="@font/cairo_bold"
+            android:gravity="start"
+            android:text="@string/adding_ad_city"
+            android:textColor="@color/appColor" />
+
+        <TextView
+            android:id="@+id/cityAdField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_30sdp"
+            android:background="@drawable/main_category_field_background"
+            android:fontFamily="@font/cairo_regular"
+            android:gravity="start"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/adding_ad_city"
+            android:textColor="@color/appColor" />
+
+
+        <TextView
+            android:id="@+id/addingAddNextPageButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_80sdp"
+            android:layout_marginTop="@dimen/_50sdp"
+            android:layout_marginEnd="@dimen/_80sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            android:background="@drawable/search_button_background"
+            android:drawableStart="@mipmap/baseline_keyboard_arrow_right_white_36"
+            android:fontFamily="@font/cairo_bold"
+            android:gravity="center"
+            android:padding="@dimen/_5sdp"
+            android:text="@string/adding_ad_next_page"
+            android:textColor="#ffffff" />
+
+    </LinearLayout>
+
+</ScrollView>

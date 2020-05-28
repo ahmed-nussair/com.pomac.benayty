@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.Navigation;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
 import com.pomac.benayty.adapters.DrawerAdapter;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
     private ImageView back;
     private DrawerLayout drawerLayout;
     private ListView drawerListView;
+    private FloatingActionButton addingAdFloatingButton;
 
     private FrameLayout menuItemHomeBackground;
     private FrameLayout menuItemHeartBackground;
@@ -65,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
         menuItemNotification.setOnClickListener(l -> navigateToNotificationsPage());
 
         menuItemSpeech.setOnClickListener(l -> navigateToMessagesPage());
+
+        addingAdFloatingButton.setOnClickListener(l -> navigateToAddingAdPage());
     }
 
     private void initViews() {
@@ -73,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
         back = findViewById(R.id.back);
         drawerLayout = findViewById(R.id.drawerLayout);
         drawerListView = findViewById(R.id.drawerListView);
+        addingAdFloatingButton = findViewById(R.id.addingAdFloatingButton);
 
         menuItemHomeBackground = findViewById(R.id.menu_item_home_background);
         menuItemHeartBackground = findViewById(R.id.menu_item_heart_background);
@@ -346,6 +351,23 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
         pageTitle.setText(getResources().getString(R.string.drawer_item_contact_us));
 
         Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.contactUsFragment);
+    }
+
+    @Override
+    public void navigateToAddingAdPage() {
+        menuItemHome.setSelected(false);
+        menuItemHeart.setSelected(false);
+        menuItemNotification.setSelected(false);
+        menuItemSpeech.setSelected(false);
+
+        menuItemHomeBackground.setSelected(false);
+        menuItemHeartBackground.setSelected(false);
+        menuItemNotificationBackground.setSelected(false);
+        menuItemSpeechBackground.setSelected(false);
+
+        pageTitle.setText(getString(R.string.adding_ad));
+
+        Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.addingAdPag1Fragment);
     }
 
     @Override

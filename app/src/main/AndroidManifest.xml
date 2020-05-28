@@ -3,6 +3,8 @@
     package="com.pomac.benayty">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -15,6 +17,8 @@
 
         <activity
             android:name=".view.activities.MainActivity"
+            android:configChanges="keyboardHidden"
+            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait">
 
         </activity>

@@ -15,6 +15,12 @@ public class Globals {
      * For storing user token
      */
     public static String token = "1583861467mUAX0TtHPz1583861467";
+
+    /**
+     * For storing user phone
+     */
+    public static String phone = "01114591647";
+
     /**
      * Base URL
      */

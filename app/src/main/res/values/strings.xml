@@ -24,7 +24,7 @@
 
     <string name="error_connection">حدث خطأ</string>
 
-
+    <string name="choose_main_item">اختر القسم الرئيسي</string>
     <string name="choose_secondary_item">اختر القسم الفرعي</string>
     <string name="choose_area">اختر المنطقة</string>
     <string name="choose_city">اختر المدينة</string>
@@ -80,5 +80,18 @@
     <string name="resend_code">إعادة إرسال الكود</string>
 
     <string name="checking_code_dialog_title">التأكد من الكود المرسل لك عبر البريد الإلكتروني</string>
+
+    <string name="adding_ad">إضافة إعلان</string>
+
+    <string name="adding_ad_main_category">القسم الرئيسي</string>
+    <string name="adding_ad_secondary_category">القسم الفرعي</string>
+    <string name="adding_ad_area">المنطقة</string>
+    <string name="adding_ad_city">المدينة</string>
+    <string name="adding_ad_name">اسم الإعلان</string>
+    <string name="adding_ad_mobile">الجوال</string>
+    <string name="adding_ad_description">الوصف</string>
+    <string name="adding_ad_image">إضافة صورة</string>
+    <string name="adding_ad_next_page">التالي</string>
+    <string name="adding_ad_submit">إرسال</string>
 
 </resources>

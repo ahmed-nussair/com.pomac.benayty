@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +14,8 @@ import android.widget.Toast;
 
 import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
-import com.pomac.benayty.view.enums.AdFieldType;
 import com.pomac.benayty.view.dialogs.MainCategoryFieldDialog;
+import com.pomac.benayty.view.enums.AdFieldType;
 import com.pomac.benayty.view.interfaces.AdFilter;
 import com.pomac.benayty.view.interfaces.AppNavigator;
 
@@ -22,40 +23,39 @@ import com.pomac.benayty.view.interfaces.AppNavigator;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainCategoryFragment extends Fragment implements AdFilter{
+public class AddingAdPag1Fragment extends Fragment implements AdFilter {
+
+    private TextView mainCategoryAdField;
+    private TextView secondaryCategoryAdField;
+    private TextView areaAdField;
+    private TextView cityAdField;
+    private TextView addingAddNextPageButton;
+
+    private AppNavigator navigator;
 
     private int mainCategoryId;
     private int secondaryCategoryId;
     private int areaId;
     private int cityId;
 
-    private String mainCategoryName;
-
-    private AppNavigator navigator;
-
-    private TextView secondaryCategoryField;
-    private TextView areaField;
-    private TextView cityField;
-    private TextView findSecondaryCategoriesButton;
-
-
-
-    public MainCategoryFragment() {
+    public AddingAdPag1Fragment() {
         mainCategoryId = -1;
         secondaryCategoryId = -1;
         areaId = -1;
         cityId = -1;
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main_category, container, false);
-        secondaryCategoryField = view.findViewById(R.id.secondaryCategoryField);
-        areaField = view.findViewById(R.id.areaField);
-        cityField = view.findViewById(R.id.cityField);
-        findSecondaryCategoriesButton = view.findViewById(R.id.findSecondaryCategoriesButton);
+        View view = inflater.inflate(R.layout.fragment_adding_ad_pag1, container, false);
+
+        mainCategoryAdField = view.findViewById(R.id.mainCategoryAdField);
+        secondaryCategoryAdField = view.findViewById(R.id.secondaryCategoryAdField);
+        areaAdField = view.findViewById(R.id.areaAdField);
+        cityAdField = view.findViewById(R.id.cityAdField);
+        addingAddNextPageButton = view.findViewById(R.id.addingAddNextPageButton);
+
         return view;
     }
 
@@ -63,23 +63,31 @@ public class MainCategoryFragment extends Fragment implements AdFilter{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        assert getArguments() != null;
-
-        mainCategoryId = getArguments().getInt(Globals.MAIN_CATEGORY_ID, 0);
-        mainCategoryName = getArguments().getString(Globals.MAIN_CATEGORY_NAME);
-
         assert getActivity() != null;
         navigator = (AppNavigator) getActivity();
 
-        secondaryCategoryField.setOnClickListener(l -> {
+        mainCategoryAdField.setOnClickListener(v -> {
             MainCategoryFieldDialog dialog = new MainCategoryFieldDialog
                     (getActivity(), android.R.style.Theme_Translucent_NoTitleBar,
-                            this, this, AdFieldType.SecondaryCategoryField);
+                            this, this, AdFieldType.MainCategoryField);
             dialog.setCancelable(false);
             dialog.show();
         });
 
-        areaField.setOnClickListener(l -> {
+        secondaryCategoryAdField.setOnClickListener(v -> {
+            if (mainCategoryId != -1) {
+                MainCategoryFieldDialog dialog = new MainCategoryFieldDialog
+                        (getActivity(), android.R.style.Theme_Translucent_NoTitleBar,
+                                this, this, AdFieldType.SecondaryCategoryField);
+                dialog.setCancelable(false);
+                dialog.show();
+            } else {
+                Toast.makeText(getContext(), "اختر القسم الرئيسي أولًا", Toast.LENGTH_LONG).show();
+            }
+
+        });
+
+        areaAdField.setOnClickListener(v -> {
             MainCategoryFieldDialog dialog = new MainCategoryFieldDialog
                     (getActivity(), android.R.style.Theme_Translucent_NoTitleBar,
                             this, this, AdFieldType.AreaField);
@@ -87,8 +95,8 @@ public class MainCategoryFragment extends Fragment implements AdFilter{
             dialog.show();
         });
 
-        cityField.setOnClickListener(l -> {
-            if(areaId != -1){
+        cityAdField.setOnClickListener(v -> {
+            if (areaId != -1) {
                 MainCategoryFieldDialog dialog = new MainCategoryFieldDialog
                         (getActivity(), android.R.style.Theme_Translucent_NoTitleBar,
                                 this, this, AdFieldType.CityField);
@@ -97,53 +105,58 @@ public class MainCategoryFragment extends Fragment implements AdFilter{
             } else {
                 Toast.makeText(getContext(), "اختر المنطقة أولًا", Toast.LENGTH_LONG).show();
             }
-
         });
 
-        findSecondaryCategoriesButton.setOnClickListener(l -> {
-
-            if (secondaryCategoryId == -1) {
-                Toast.makeText(getActivity(), "من فضلك اختر القسم الفرعي", Toast.LENGTH_LONG).show();
+        addingAddNextPageButton.setOnClickListener(v -> {
+            if (mainCategoryId == -1) {
+                Toast.makeText(getContext(), "اختر القسم الرئيسي أولاً", Toast.LENGTH_LONG).show();
+                return;
+            } else if (secondaryCategoryId == -1) {
+                Toast.makeText(getContext(), "اختر القسم الفرعي أولاً", Toast.LENGTH_LONG).show();
                 return;
             } else if (areaId == -1) {
-                Toast.makeText(getActivity(), "من فضلك اختر المنطقة", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "اختر المنطقة", Toast.LENGTH_LONG).show();
                 return;
             } else if (cityId == -1) {
-                Toast.makeText(getActivity(), "من فضلك اختر المدينة", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "اختر المدينة", Toast.LENGTH_LONG).show();
                 return;
             }
-
             Bundle bundle = new Bundle();
             bundle.putInt(Globals.MAIN_CATEGORY_ID, mainCategoryId);
-            bundle.putString(Globals.MAIN_CATEGORY_NAME, mainCategoryName);
+            bundle.putInt(Globals.SECONDARY_CATEGORY_ID, secondaryCategoryId);
+            bundle.putInt(Globals.AREA_ID, areaId);
+            bundle.putInt(Globals.CITY_ID, cityId);
 
-            navigator.navigateToSearchResults(mainCategoryId, secondaryCategoryId, areaId, cityId, bundle);
+            Navigation.findNavController(getActivity().findViewById(R.id.nav_host)).navigate(R.id.addingAdPag2Fragment, bundle);
         });
     }
 
     @Override
     public void setMainCategory(int mainCategoryId, String mainCategoryName) {
-        // Nothing to do here
+        this.mainCategoryId = mainCategoryId;
+        this.secondaryCategoryId = -1;
+        mainCategoryAdField.setText(mainCategoryName);
+        secondaryCategoryAdField.setText(getString(R.string.adding_ad_secondary_category));
     }
 
     @Override
     public void setSecondaryCategory(int secondaryCategoryId, String secondaryCategoryName) {
         this.secondaryCategoryId = secondaryCategoryId;
-        secondaryCategoryField.setText(secondaryCategoryName);
+        secondaryCategoryAdField.setText(secondaryCategoryName);
     }
 
     @Override
     public void setArea(int areaId, String areaName) {
         this.areaId = areaId;
         this.cityId = -1;
-        areaField.setText(areaName);
-        cityField.setText(getResources().getString(R.string.choose_city));
+        areaAdField.setText(areaName);
+        cityAdField.setText(getResources().getString(R.string.adding_ad_city));
     }
 
     @Override
     public void setCity(int cityId, String cityName) {
         this.cityId = cityId;
-        cityField.setText(cityName);
+        cityAdField.setText(cityName);
     }
 
     @Override

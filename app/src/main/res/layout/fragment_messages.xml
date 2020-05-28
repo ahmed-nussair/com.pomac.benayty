@@ -5,11 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".view.fragments.MessagesFragment">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/messagesRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textColor="#000000"
-        android:text="@string/speech_fragment" />
+        android:layout_height="match_parent" />
 
 </FrameLayout>
