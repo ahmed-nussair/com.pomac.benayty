@@ -371,6 +371,30 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
     }
 
     @Override
+    public void navigateToChattingPage(String title) {
+        menuItemHome.setSelected(false);
+        menuItemHeart.setSelected(false);
+        menuItemNotification.setSelected(false);
+        menuItemSpeech.setSelected(false);
+
+        menuItemHomeBackground.setSelected(false);
+        menuItemHeartBackground.setSelected(false);
+        menuItemNotificationBackground.setSelected(false);
+        menuItemSpeechBackground.setSelected(false);
+
+        pageTitle.setText(title);
+
+        Navigation.findNavController(findViewById(R.id.nav_host)).navigate(R.id.chattingFragment);
+
+        back.setOnClickListener(v -> {
+            navigateToMessagesPage();
+            back.setVisibility(View.GONE);
+        });
+
+        back.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         Globals.compositeDisposable.dispose();

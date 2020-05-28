@@ -18,6 +18,7 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
+import com.pomac.benayty.view.interfaces.OnMessageItemSelected;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
@@ -28,10 +29,12 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
 
     private Context context;
     private QuerySnapshot messages;
+    private OnMessageItemSelected onMessageItemSelected;
 
-    public MessagesAdapter(Context context, QuerySnapshot messages) {
+    public MessagesAdapter(Context context, QuerySnapshot messages, OnMessageItemSelected onMessageItemSelected) {
         this.context = context;
         this.messages = messages;
+        this.onMessageItemSelected = onMessageItemSelected;
     }
 
     @NonNull
@@ -74,6 +77,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
 
                     holder.messageItem.setOnClickListener(v -> {
                         Log.d(Globals.TAG, "Clicked");
+                        onMessageItemSelected.onMessageItemSelected(Objects.requireNonNull(userData.get(0).get("name")).toString());
                     });
                 });
     }

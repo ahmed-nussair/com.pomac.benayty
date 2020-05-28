@@ -1,23 +1,16 @@
 package com.pomac.benayty.view.fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -25,16 +18,13 @@ import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
 import com.pomac.benayty.adapters.MessagesAdapter;
 import com.pomac.benayty.view.interfaces.AppNavigator;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.pomac.benayty.view.interfaces.OnMessageItemSelected;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MessagesFragment extends Fragment {
+public class MessagesFragment extends Fragment implements OnMessageItemSelected {
 
     private AppNavigator navigator;
 
@@ -63,13 +53,6 @@ public class MessagesFragment extends Fragment {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Create a new user with a first and last name
-        Map<String, Object> user = new HashMap<>();
-        user.put("first", "Ada");
-        user.put("last", "Lovelace");
-        user.put("born", 1815);
-
-        // Add a new document with a generated ID
         db.collection("messages")
                 .get()
                 .addOnCompleteListener(task -> {
@@ -77,7 +60,7 @@ public class MessagesFragment extends Fragment {
 
                         QuerySnapshot result = task.getResult();
 
-                        messagesRecyclerView.setAdapter(new MessagesAdapter(getActivity(), task.getResult()));
+                        messagesRecyclerView.setAdapter(new MessagesAdapter(getActivity(), task.getResult(), this));
                         messagesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                         for (QueryDocumentSnapshot document : result) {
                             Log.d(Globals.TAG, document.getId() + " => " + document.getData());
@@ -86,5 +69,10 @@ public class MessagesFragment extends Fragment {
                         Log.e(Globals.TAG, "Error", task.getException());
                     }
                 });
+    }
+
+    @Override
+    public void onMessageItemSelected(String userName) {
+        navigator.navigateToChattingPage(userName);
     }
 }

@@ -6,6 +6,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +22,11 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
+import com.pomac.benayty.adapters.CommentsAdapter;
 import com.pomac.benayty.apis.AddToWishListApi;
+import com.pomac.benayty.apis.ShowUserApi;
 import com.pomac.benayty.model.response.AddToWishListResponse;
+import com.pomac.benayty.model.response.ShowUserResponse;
 import com.pomac.benayty.view.interfaces.AppNavigator;
 import com.pomac.benayty.viewmodel.AdViewModel;
 import com.squareup.picasso.Picasso;
@@ -54,6 +59,7 @@ public class AdDetailsFragment extends Fragment {
     private FrameLayout messageFrameLayout;
     private FrameLayout commentFrameLayout;
     private FrameLayout addToWishListFrameLayout;
+    private RecyclerView commentsRecyclerView;
 
     private AppNavigator navigator;
 
@@ -80,6 +86,7 @@ public class AdDetailsFragment extends Fragment {
         addToWishListFrameLayout = view.findViewById(R.id.addToWishListFrameLayout);
         commentFrameLayout = view.findViewById(R.id.commentFrameLayout);
         messageFrameLayout = view.findViewById(R.id.messageFrameLayout);
+        commentsRecyclerView = view.findViewById(R.id.commentsRecyclerView);
         return view;
     }
 
@@ -116,6 +123,26 @@ public class AdDetailsFragment extends Fragment {
 
                     adDetailsProgressBar.setVisibility(View.GONE);
                     adContentScrollView.setVisibility(View.VISIBLE);
+
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(Globals.BASE_URL)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                            .build();
+
+                    ShowUserApi showUserApi = retrofit.create(ShowUserApi.class);
+
+                    Observable<ShowUserResponse> showUserResponseObservable = showUserApi.showUser(Integer.parseInt(response.getData().getUserId()))
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread());
+
+                    Globals.compositeDisposable.add(showUserResponseObservable.subscribe(
+                            showUserResponse -> {
+                                CommentsAdapter adapter = new CommentsAdapter(getActivity(), showUserResponse.getData().getComments());
+                                commentsRecyclerView.setAdapter(adapter);
+                                commentsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                            }
+                    ));
                 }
         );
 
