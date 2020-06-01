@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -81,7 +82,9 @@ public class ChattingActivity extends AppCompatActivity {
                     }
                     RecyclerView chattingMessagesRecyclerView = findViewById(R.id.chattingMessagesRecyclerView);
                     chattingMessagesRecyclerView.setAdapter(new ChattingAdapter(this, messages, from));
-                    chattingMessagesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+                    linearLayoutManager.setStackFromEnd(true);
+                    chattingMessagesRecyclerView.setLayoutManager(linearLayoutManager);
                 });
     }
 }

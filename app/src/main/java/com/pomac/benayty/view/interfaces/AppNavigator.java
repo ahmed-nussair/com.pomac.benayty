@@ -25,6 +25,4 @@ public interface AppNavigator {
     void navigateToAdDetails(int adId, String adName, Bundle bundle);
 
     void navigateToAddingAdPage();
-
-    void navigateToChattingPage(String title);
 }

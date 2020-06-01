@@ -60,9 +60,4 @@
         android:name="com.pomac.benayty.view.fragments.AddingAdPag2Fragment"
         android:label="fragment_adding_ad_pag2"
         tools:layout="@layout/fragment_adding_ad_pag2" />
-    <fragment
-        android:id="@+id/chattingFragment"
-        android:name="com.pomac.benayty.view.fragments.ChattingFragment"
-        android:label="fragment_chatting"
-        tools:layout="@layout/fragment_chatting" />
 </navigation>
