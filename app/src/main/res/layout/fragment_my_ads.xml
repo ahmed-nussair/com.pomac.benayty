@@ -12,6 +12,26 @@
         android:layout_gravity="center"
         android:indeterminateDrawable="@drawable/progress" />
 
+    <TextView
+        android:id="@+id/myAdsLoginFirstTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/cairo_bold"
+        android:gravity="center"
+        android:text="@string/login_first"
+        android:textColor="@color/appColor"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/noAdForYourTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/cairo_bold"
+        android:gravity="center"
+        android:text="@string/no_ad_for_you"
+        android:textColor="@color/appColor"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/myAdsRecyclerView"
         android:layout_width="match_parent"

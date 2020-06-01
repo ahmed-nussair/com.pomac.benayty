@@ -5,11 +5,17 @@
     android:layout_height="match_parent"
     tools:context=".view.fragments.NotificationFragment">
 
-    <TextView
+    <ProgressBar
+        android:id="@+id/notificationsProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateDrawable="@drawable/progress" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/notificationsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:textColor="#000000"
-        android:text="@string/notification_fragment" />
+        android:visibility="gone" />
 
 </FrameLayout>

@@ -28,6 +28,10 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".view.activities.ChattingActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".view.activities.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>

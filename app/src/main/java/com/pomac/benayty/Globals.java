@@ -112,4 +112,20 @@ public class Globals {
      * Field for advertisement id
      */
     public static final String AD_ID = "ad_id";
+
+    /**
+     * Field for the name of the user to be chatted
+     */
+    public static final String USER_NAME = "user_name";
+
+    public static final String FROM = "from";
+
+    public static final String TO = "to";
+
+    // For shared preferences
+    public static final String SHARED_PREFERENCES = "benayty";
+    public static final String USER_TOKEN = "token";
+    public static final String USER_PHONE = "phone";
+    public static final String FCM_TOKEN = "fcm_token";
+    public static final String USER_IMAGE_PATH = "image_path";
 }

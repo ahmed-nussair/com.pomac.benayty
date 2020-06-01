@@ -1,7 +1,9 @@
 package com.pomac.benayty.view.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -10,6 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -47,6 +50,16 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(Globals.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        if (sharedPreferences.contains(Globals.USER_TOKEN)) {
+            Globals.token = sharedPreferences.getString(Globals.USER_TOKEN, "");
+            Globals.phone = sharedPreferences.getString(Globals.USER_PHONE, "");
+        } else {
+            Globals.token = "";
+            Globals.phone = "";
+        }
+
         setContentView(R.layout.activity_main);
 
         initViews();
@@ -135,6 +148,25 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
             } else if (item.getDrawerItemTitle().equals(getResources().getString(R.string.drawer_item_login_logout))) {
                 Log.d(Globals.TAG, getResources().getString(R.string.drawer_item_login_logout));
                 drawerLayout.closeDrawer(Gravity.RIGHT);
+
+                if (Globals.token.isEmpty()) {
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                } else {
+                    Globals.token = "";
+                    SharedPreferences sharedPreferences = getSharedPreferences(Globals.SHARED_PREFERENCES, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                    editor.remove(Globals.USER_TOKEN);
+                    editor.remove(Globals.USER_NAME);
+                    editor.remove(Globals.USER_PHONE);
+                    editor.remove(Globals.USER_IMAGE_PATH);
+
+                    if (editor.commit()) {
+                        Toast.makeText(this, "تم تسجيل الخروج", Toast.LENGTH_LONG).show();
+                        navigateToMainPage();
+                    }
+                }
             }
         });
         drawerButton.setOnClickListener(l -> drawerLayout.openDrawer(Gravity.RIGHT));

@@ -48,6 +48,9 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
     public void onBindViewHolder(@NonNull MessagesAdapter.MessagesViewHolder holder, int position) {
         holder.messageTextView.setText(Objects.requireNonNull(messages.getDocuments().get(position).get("message")).toString());
 
+        long time = (long) messages.getDocuments().get(position).get("time");
+
+        Log.d(Globals.TAG, "time: " + time);
         String from = Objects.requireNonNull(messages.getDocuments().get(position).get("from")).toString();
         FirebaseFirestore.getInstance()
                 .collection("users")
@@ -77,7 +80,11 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
 
                     holder.messageItem.setOnClickListener(v -> {
                         Log.d(Globals.TAG, "Clicked");
-                        onMessageItemSelected.onMessageItemSelected(Objects.requireNonNull(userData.get(0).get("name")).toString());
+                        onMessageItemSelected
+                                .onMessageItemSelected(Objects.requireNonNull(userData.get(0).get("name")).toString(),
+                                        Objects.requireNonNull(messages.getDocuments().get(position).get("from")).toString(),
+                                        Objects.requireNonNull(messages.getDocuments().get(position).get("to")).toString()
+                                );
                     });
                 });
     }

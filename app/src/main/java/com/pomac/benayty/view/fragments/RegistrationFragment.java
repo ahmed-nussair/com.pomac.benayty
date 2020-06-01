@@ -1,5 +1,7 @@
 package com.pomac.benayty.view.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -106,7 +108,27 @@ public class RegistrationFragment extends Fragment {
                     .observeOn(AndroidSchedulers.mainThread());
 
             Disposable disposable = observable.subscribe(
-                    response -> Log.d(Globals.TAG, response.getUserData().getName())
+                    response -> {
+                        if (response.getStatus() == 200) {
+                            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Globals.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString(Globals.USER_TOKEN, response.getToken());
+                            editor.putString(Globals.USER_NAME, response.getUserData().getName());
+                            editor.putString(Globals.USER_PHONE, response.getUserData().getPhone());
+                            editor.putString(Globals.USER_IMAGE_PATH, response.getUserData().getImagePath());
+                            if (editor.commit()) {
+                                Toast.makeText(getContext(), "تم تسجيلك", Toast.LENGTH_LONG).show();
+                                Globals.token = sharedPreferences.getString(Globals.USER_TOKEN, "");
+                                Globals.phone = sharedPreferences.getString(Globals.USER_PHONE, "");
+                                getActivity().finish();
+                            }
+                        } else {
+                            Toast.makeText(getContext(), response.getErrors()[0], Toast.LENGTH_LONG).show();
+                        }
+                    },
+                    registrationError -> {
+                        Toast.makeText(getContext(), registrationError.getMessage(), Toast.LENGTH_LONG).show();
+                    }
             );
 
             Globals.compositeDisposable.add(disposable);

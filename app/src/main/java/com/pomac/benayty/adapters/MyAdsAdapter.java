@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,6 +18,7 @@ import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
 import com.pomac.benayty.model.Advertisement;
 import com.pomac.benayty.view.interfaces.OnAdItemSelected;
+import com.pomac.benayty.view.interfaces.OnItemDeleted;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
@@ -31,17 +33,19 @@ public class MyAdsAdapter extends RecyclerView.Adapter<MyAdsAdapter.AdsViewHolde
     private Context context;
     private List<Advertisement> ads;
     private OnAdItemSelected onAdItemSelected;
+    private OnItemDeleted onItemDeleted;
 
-    public MyAdsAdapter(Context context, List<Advertisement> ads, OnAdItemSelected onAdItemSelected) {
+    public MyAdsAdapter(Context context, List<Advertisement> ads, OnAdItemSelected onAdItemSelected, OnItemDeleted onItemDeleted) {
         this.context = context;
         this.ads = ads;
         this.onAdItemSelected = onAdItemSelected;
+        this.onItemDeleted = onItemDeleted;
     }
 
     @NonNull
     @Override
     public AdsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.ad_item_layout, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.my_ads_item_layout, parent, false);
         return new AdsViewHolder(view);
     }
 
@@ -73,6 +77,10 @@ public class MyAdsAdapter extends RecyclerView.Adapter<MyAdsAdapter.AdsViewHolde
         } catch (Exception e) {
             Log.e(Globals.TAG, Objects.requireNonNull(e.getMessage()));
         }
+
+        holder.deleteAdButtonImageView.setOnClickListener(v -> {
+            onItemDeleted.onItemDeleted(ads.get(position).getId());
+        });
     }
 
     @Override
@@ -87,6 +95,7 @@ public class MyAdsAdapter extends RecyclerView.Adapter<MyAdsAdapter.AdsViewHolde
         TextView adNameTextView;
         TextView adUserNameTextView;
         TextView adCreationTimeTextView;
+        ImageView deleteAdButtonImageView;
 
         AdsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -95,6 +104,7 @@ public class MyAdsAdapter extends RecyclerView.Adapter<MyAdsAdapter.AdsViewHolde
             adNameTextView = itemView.findViewById(R.id.adNameTextView);
             adUserNameTextView = itemView.findViewById(R.id.adUserNameTextView);
             adCreationTimeTextView = itemView.findViewById(R.id.adCreationTimeTextView);
+            deleteAdButtonImageView = itemView.findViewById(R.id.deleteAdButtonImageView);
         }
     }
 }

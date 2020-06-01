@@ -101,7 +101,8 @@ public class ForgotPasswordFragment extends Fragment {
                             Toast.makeText(getActivity(), "عفوًا .. البريد الإلكتروني الذي أدخلته غير مسجل", Toast.LENGTH_LONG).show();
                         }
 
-                    }
+                    },
+                    error -> Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show()
             );
 
             Globals.compositeDisposable.add(disposable);

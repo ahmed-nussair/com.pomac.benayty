@@ -98,6 +98,9 @@ public class UpdatePasswordFragment extends Fragment {
                     response -> {
                         Toast.makeText(getContext(), "لقد تم تغيير كلمة المرور .. يمكنك تسجيل الدخول", Toast.LENGTH_LONG).show();
                         navigator.navigateToLoginScreen();
+                    },
+                    error -> {
+                        Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
                     }
             );
 

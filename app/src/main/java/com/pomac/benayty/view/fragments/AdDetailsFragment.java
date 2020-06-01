@@ -1,5 +1,6 @@
 package com.pomac.benayty.view.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -27,6 +28,8 @@ import com.pomac.benayty.apis.AddToWishListApi;
 import com.pomac.benayty.apis.ShowUserApi;
 import com.pomac.benayty.model.response.AddToWishListResponse;
 import com.pomac.benayty.model.response.ShowUserResponse;
+import com.pomac.benayty.view.activities.ChattingActivity;
+import com.pomac.benayty.view.dialogs.AddingCommentDialog;
 import com.pomac.benayty.view.interfaces.AppNavigator;
 import com.pomac.benayty.viewmodel.AdViewModel;
 import com.squareup.picasso.Picasso;
@@ -107,6 +110,17 @@ public class AdDetailsFragment extends Fragment {
         adViewModel.showAdvertisement(adId).observe(
                 getActivity(),
                 response -> {
+                    messageFrameLayout.setOnClickListener(v -> {
+                        if (Globals.token.isEmpty()) {
+                            Toast.makeText(getContext(), "قم بتسجيل الدخول أولاً حتى تتمكن من مراسلة صاحب الإعلان", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        Intent intent = new Intent(getActivity(), ChattingActivity.class);
+                        intent.putExtra(Globals.USER_NAME, response.getData().getUser().getName());
+                        intent.putExtra(Globals.FROM, "01114591647");
+                        intent.putExtra(Globals.TO, response.getData().getUser().getPhone());
+                        startActivity(intent);
+                    });
                     adDetailsUserNameTextView.setText(response.getData().getUser().getName());
                     adAreaTextView.setText(response.getData().getArea());
                     adDescriptionTextView.setText(response.getData().getDescription());
@@ -147,6 +161,11 @@ public class AdDetailsFragment extends Fragment {
         );
 
         addToWishListFrameLayout.setOnClickListener(v -> {
+
+            if (Globals.token.isEmpty()) {
+                Toast.makeText(getContext(), "قم بتسجيل الدخول أولاً حتى تتمكن من الإضافة", Toast.LENGTH_LONG).show();
+                return;
+            }
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(Globals.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
@@ -172,5 +191,23 @@ public class AdDetailsFragment extends Fragment {
 
             Globals.compositeDisposable.add(disposable);
         });
+
+        commentFrameLayout.setOnClickListener(v -> {
+            if (Globals.token.isEmpty()) {
+                Toast.makeText(getContext(), "قم بتسجيل الدخول أولاً حتى تتمكن من كتابة تعليق", Toast.LENGTH_LONG).show();
+                return;
+            }
+            AddingCommentDialog addingCommentDialog =
+                    new AddingCommentDialog(
+                            getActivity(),
+                            android.R.style.Theme_Translucent_NoTitleBar,
+                            adId,
+                            this
+                    );
+            addingCommentDialog.setCancelable(false);
+            addingCommentDialog.show();
+        });
+
+
     }
 }

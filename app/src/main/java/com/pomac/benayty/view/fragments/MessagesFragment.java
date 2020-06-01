@@ -1,5 +1,6 @@
 package com.pomac.benayty.view.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
 import com.pomac.benayty.adapters.MessagesAdapter;
+import com.pomac.benayty.view.activities.ChattingActivity;
 import com.pomac.benayty.view.interfaces.AppNavigator;
 import com.pomac.benayty.view.interfaces.OnMessageItemSelected;
 
@@ -54,13 +56,22 @@ public class MessagesFragment extends Fragment implements OnMessageItemSelected 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection("messages")
+                .whereEqualTo("read", false)
+                .orderBy("time")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
 
                         QuerySnapshot result = task.getResult();
 
-                        messagesRecyclerView.setAdapter(new MessagesAdapter(getActivity(), task.getResult(), this));
+                        MessagesAdapter adapter = new MessagesAdapter(getActivity(), task.getResult(), this);
+                        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                            @Override
+                            public void onChanged() {
+                                super.onChanged();
+                            }
+                        });
+                        messagesRecyclerView.setAdapter(adapter);
                         messagesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                         for (QueryDocumentSnapshot document : result) {
                             Log.d(Globals.TAG, document.getId() + " => " + document.getData());
@@ -72,7 +83,12 @@ public class MessagesFragment extends Fragment implements OnMessageItemSelected 
     }
 
     @Override
-    public void onMessageItemSelected(String userName) {
-        navigator.navigateToChattingPage(userName);
+    public void onMessageItemSelected(String userName, String from, String to) {
+//        navigator.navigateToChattingPage(userName);
+        Intent intent = new Intent(getActivity(), ChattingActivity.class);
+        intent.putExtra(Globals.USER_NAME, userName);
+        intent.putExtra(Globals.FROM, from);
+        intent.putExtra(Globals.TO, to);
+        startActivity(intent);
     }
 }

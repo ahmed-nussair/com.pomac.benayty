@@ -16,6 +16,7 @@ import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -25,6 +26,7 @@ import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
 import com.pomac.benayty.apis.AddingAdApi;
 import com.pomac.benayty.model.response.AddingAdResponse;
+import com.pomac.benayty.view.interfaces.AppNavigator;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -66,6 +68,8 @@ public class AddingAdPag2Fragment extends Fragment {
     private Bitmap adImageBitmap;
     private File adImageFile;
 
+    private AppNavigator navigator;
+
     public AddingAdPag2Fragment() {
         // Required empty public constructor
     }
@@ -98,6 +102,8 @@ public class AddingAdPag2Fragment extends Fragment {
         cityId = getArguments().getInt(Globals.CITY_ID);
 
         assert getActivity() != null;
+
+        navigator = (AppNavigator) getActivity();
 
         ActivityCompat.requestPermissions(getActivity(),
                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -158,7 +164,15 @@ public class AddingAdPag2Fragment extends Fragment {
             Disposable disposable = addingAdResponseObservable.subscribe(
                     response -> {
                         Log.d(Globals.TAG, response.getMessage());
-                    }
+                        if (response.getStatus() == 200) {
+                            Toast.makeText(getContext(), response.getMessage(), Toast.LENGTH_LONG).show();
+                            navigator.navigateToMainPage();
+                        } else {
+                            Toast.makeText(getContext(), response.getErrors()[0], Toast.LENGTH_LONG).show();
+                        }
+
+                    },
+                    addingAdError -> Toast.makeText(getContext(), addingAdError.getMessage(), Toast.LENGTH_LONG).show()
             );
 
             Globals.compositeDisposable.add(disposable);

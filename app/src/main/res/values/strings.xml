@@ -96,4 +96,14 @@
 
     <string name="comments">التعليقات</string>
 
+    <string name="write_your_comment">اكتب تعليقك</string>
+    <string name="add_comment">أضف التعليق</string>
+    <string name="cancel">إلغاء</string>
+
+    <string name="login_first">قم بتسجيل الدخول أولاً</string>
+
+    <string name="no_wish_list_item">لا يوجد لديك أي إعلان في المفضلة</string>
+
+    <string name="no_ad_for_you">ليس لديك أي إعلان</string>
+
 </resources>
