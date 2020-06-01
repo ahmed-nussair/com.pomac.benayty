@@ -78,6 +78,7 @@
                 android:textColor="@color/appColor" />
 
             <ImageView
+                android:id="@+id/sendMessageButtonImageView"
                 android:layout_width="@dimen/_15sdp"
                 android:layout_height="@dimen/_15sdp"
                 android:layout_alignParentStart="true"

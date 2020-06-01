@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,10 +116,18 @@ public class AdDetailsFragment extends Fragment {
                             Toast.makeText(getContext(), "قم بتسجيل الدخول أولاً حتى تتمكن من مراسلة صاحب الإعلان", Toast.LENGTH_LONG).show();
                             return;
                         }
+
+                        Log.d(Globals.TAG, Globals.phone);
+                        Log.d(Globals.TAG, response.getData().getPhone());
+
+                        if (Globals.phone.equals(response.getData().getPhone())) {
+                            Toast.makeText(getContext(), "هذا الإعلان خاص بك .. لا يمكنك المراسلة", Toast.LENGTH_LONG).show();
+                            return;
+                        }
                         Intent intent = new Intent(getActivity(), ChattingActivity.class);
                         intent.putExtra(Globals.USER_NAME, response.getData().getUser().getName());
-                        intent.putExtra(Globals.FROM, "01114591647");
-                        intent.putExtra(Globals.TO, response.getData().getUser().getPhone());
+                        intent.putExtra(Globals.FROM, Globals.phone);
+                        intent.putExtra(Globals.TO, response.getData().getPhone());
                         startActivity(intent);
                     });
                     adDetailsUserNameTextView.setText(response.getData().getUser().getName());

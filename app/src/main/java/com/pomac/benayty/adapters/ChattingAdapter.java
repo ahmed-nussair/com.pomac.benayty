@@ -11,18 +11,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.firestore.QuerySnapshot;
+import com.pomac.benayty.ChattingMessage;
 import com.pomac.benayty.R;
 
-import java.util.Objects;
+import java.util.List;
 
 public class ChattingAdapter extends RecyclerView.Adapter<ChattingAdapter.ChattingViewHolder> {
 
     private Context context;
-    private QuerySnapshot messages;
+    private List<ChattingMessage> messages;
     private String from;
 
-    public ChattingAdapter(Context context, QuerySnapshot messages, String from) {
+    public ChattingAdapter(Context context, List<ChattingMessage> messages, String from) {
         this.context = context;
         this.messages = messages;
         this.from = from;
@@ -37,11 +37,9 @@ public class ChattingAdapter extends RecyclerView.Adapter<ChattingAdapter.Chatti
 
     @Override
     public void onBindViewHolder(@NonNull ChattingViewHolder holder, int position) {
-        holder.chattingTextView.setText(Objects.requireNonNull(messages.getDocuments().get(position).get("message")).toString());
+        holder.chattingTextView.setText(messages.get(position).getMessage());
 
-        String from = Objects.requireNonNull(messages.getDocuments().get(position).get("from")).toString();
-
-        if (this.from.equals(from)) {
+        if (this.from.equals(messages.get(position).getFrom())) {
             holder.chattingItemLayout.setGravity(Gravity.START);
         } else {
             holder.chattingItemLayout.setGravity(Gravity.END);
