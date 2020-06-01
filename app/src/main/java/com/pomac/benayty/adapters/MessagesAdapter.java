@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.pomac.benayty.Globals;
-import com.pomac.benayty.MessageItem;
+import com.pomac.benayty.view.helperclasses.MessageItem;
 import com.pomac.benayty.R;
 import com.pomac.benayty.view.interfaces.OnMessageItemSelected;
 import com.squareup.picasso.Picasso;

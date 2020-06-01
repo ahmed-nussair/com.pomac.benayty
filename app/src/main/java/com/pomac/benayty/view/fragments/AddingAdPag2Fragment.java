@@ -188,6 +188,7 @@ public class AddingAdPag2Fragment extends Fragment {
 
 //            adProposedImageView.setImageURI(data.getData());
 
+            assert data != null;
             Uri uri = data.getData();
             try {
                 adImageBitmap = BitmapFactory.decodeStream(new BufferedInputStream(getActivity().getContentResolver().openInputStream(uri)));
@@ -224,7 +225,6 @@ public class AddingAdPag2Fragment extends Fragment {
                 outStream.write(bitmapdata);
                 outStream.flush();
                 outStream.close();
-//                file.delete();
 
             } catch (IOException e) {
                 e.printStackTrace();

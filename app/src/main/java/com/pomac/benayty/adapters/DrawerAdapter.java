@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pomac.benayty.R;
-import com.pomac.benayty.view.DrawerItem;
+import com.pomac.benayty.view.helperclasses.DrawerItem;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

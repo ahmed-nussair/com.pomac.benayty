@@ -1,4 +1,4 @@
-package com.pomac.benayty.view;
+package com.pomac.benayty.view.helperclasses;
 
 public class DrawerItem {
 

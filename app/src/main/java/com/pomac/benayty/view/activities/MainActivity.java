@@ -22,7 +22,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
 import com.pomac.benayty.adapters.DrawerAdapter;
-import com.pomac.benayty.view.DrawerItem;
+import com.pomac.benayty.view.helperclasses.DrawerItem;
 import com.pomac.benayty.view.interfaces.AppNavigator;
 
 import java.util.ArrayList;
