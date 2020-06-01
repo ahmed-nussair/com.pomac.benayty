@@ -93,23 +93,23 @@
         </RelativeLayout>
 
 
-        <ImageView
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/_2sdp"
-            android:layout_marginEnd="@dimen/_2sdp"
-            android:src="@drawable/mic"
-            tools:ignore="ContentDescription" />
+        <!--        <ImageView-->
+        <!--            android:layout_width="@dimen/_30sdp"-->
+        <!--            android:layout_height="@dimen/_30sdp"-->
+        <!--            android:layout_gravity="center_vertical"-->
+        <!--            android:layout_marginStart="@dimen/_2sdp"-->
+        <!--            android:layout_marginEnd="@dimen/_2sdp"-->
+        <!--            android:src="@drawable/mic"-->
+        <!--            tools:ignore="ContentDescription" />-->
 
-        <ImageView
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/_2sdp"
-            android:layout_marginEnd="@dimen/_2sdp"
-            android:src="@drawable/camera"
-            tools:ignore="ContentDescription" />
+        <!--        <ImageView-->
+        <!--            android:layout_width="@dimen/_30sdp"-->
+        <!--            android:layout_height="@dimen/_30sdp"-->
+        <!--            android:layout_gravity="center_vertical"-->
+        <!--            android:layout_marginStart="@dimen/_2sdp"-->
+        <!--            android:layout_marginEnd="@dimen/_2sdp"-->
+        <!--            android:src="@drawable/camera"-->
+        <!--            tools:ignore="ContentDescription" />-->
 
     </LinearLayout>
 

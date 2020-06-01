@@ -1,6 +1,8 @@
 package com.pomac.benayty.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,10 +40,14 @@ public class ChattingAdapter extends RecyclerView.Adapter<ChattingAdapter.Chatti
     @Override
     public void onBindViewHolder(@NonNull ChattingViewHolder holder, int position) {
         holder.chattingTextView.setText(messages.get(position).getMessage());
+        holder.chattingTextView.setTextColor(Color.WHITE);
+        holder.chattingTextView.setBackgroundResource(R.drawable.chatting_background);
 
         if (this.from.equals(messages.get(position).getFrom())) {
             holder.chattingItemLayout.setGravity(Gravity.START);
         } else {
+            holder.chattingTextView.setBackgroundResource(R.drawable.chatting_to_background);
+            holder.chattingTextView.setTextColor(Color.parseColor("#1F80A9"));
             holder.chattingItemLayout.setGravity(Gravity.END);
         }
 

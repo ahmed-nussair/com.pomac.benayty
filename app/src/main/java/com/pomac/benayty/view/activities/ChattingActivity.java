@@ -46,6 +46,9 @@ public class ChattingActivity extends AppCompatActivity {
 
         ((ImageView) findViewById(R.id.sendMessageButtonImageView)).setOnClickListener(v -> {
             EditText chattingEditText = findViewById(R.id.chattingEditText);
+            if (chattingEditText.getText().toString().trim().equals("")) {
+                return;
+            }
             Map<String, Object> data = new HashMap<>();
             data.put("from", to);
             data.put("to", from);
