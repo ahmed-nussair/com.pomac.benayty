@@ -15,11 +15,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
 import com.pomac.benayty.apis.RegisterApi;
 import com.pomac.benayty.model.response.RegisterResponse;
 import com.pomac.benayty.view.interfaces.AppLoginNavigator;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -120,6 +124,13 @@ public class RegistrationFragment extends Fragment {
                                 Toast.makeText(getContext(), "تم تسجيلك", Toast.LENGTH_LONG).show();
                                 Globals.token = sharedPreferences.getString(Globals.USER_TOKEN, "");
                                 Globals.phone = sharedPreferences.getString(Globals.USER_PHONE, "");
+
+                                Map<String, Object> newUser = new HashMap<>();
+                                newUser.put("fcmToken", Globals.fcmToken);
+                                newUser.put("name", response.getUserData().getName());
+                                newUser.put("phone", response.getUserData().getPhone());
+                                newUser.put("imagePath", response.getUserData().getImagePath());
+                                FirebaseFirestore.getInstance().collection("users").add(newUser);
                                 getActivity().finish();
                             }
                         } else {

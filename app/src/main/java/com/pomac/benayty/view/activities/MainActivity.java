@@ -52,6 +52,10 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
         super.onCreate(savedInstanceState);
 
         SharedPreferences sharedPreferences = getSharedPreferences(Globals.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+
+        Globals.fcmToken = sharedPreferences.getString(Globals.FCM_TOKEN, "");
+        Log.d(Globals.TAG, "" + sharedPreferences.contains(Globals.FCM_TOKEN));
+
         if (sharedPreferences.contains(Globals.USER_TOKEN)) {
             Globals.token = sharedPreferences.getString(Globals.USER_TOKEN, "");
             Globals.phone = sharedPreferences.getString(Globals.USER_PHONE, "");

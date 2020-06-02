@@ -17,6 +17,11 @@ public class Globals {
     public static String token = "1583861467mUAX0TtHPz1583861467";
 
     /**
+     * FCM Base URL
+     */
+    public static final String FCM_BASE_URL = "https://fcm.googleapis.com/";
+
+    /**
      * For storing user phone
      */
     public static String phone = "01114591647";
@@ -25,6 +30,9 @@ public class Globals {
      * Base URL
      */
     public static final String BASE_URL = "https://pomac.info/";
+    public static final String FCM_AUTHORIZATION = "key=AAAAWsdOdxM:APA91bHsMA1G0n7w9LzzLwTSoDeEBy" +
+            "J8yIP2cx9BmTOEm0qj6xcx-t5dWA8F8wo6zHCwSyV7z7Apt_lCRxkkkB3bNmgVAVuEBjKqeckombtgpzpwyBR" +
+            "hjU9HB53Gzf3wMQp2nT43Rg6f";
 
     /**
      * Log tag
@@ -128,4 +136,8 @@ public class Globals {
     public static final String USER_PHONE = "phone";
     public static final String FCM_TOKEN = "fcm_token";
     public static final String USER_IMAGE_PATH = "image_path";
+    /**
+     * For storing user token
+     */
+    public static String fcmToken = "";
 }

@@ -3,11 +3,6 @@ package com.pomac.benayty.view.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +10,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
 import com.pomac.benayty.apis.LoginApi;
 import com.pomac.benayty.model.response.LoginResponse;
 import com.pomac.benayty.view.interfaces.AppLoginNavigator;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -86,9 +89,6 @@ public class LoginFragment extends Fragment {
             String phone = loginPhoneEditText.getText().toString();
             String password = loginPasswordEditText.getText().toString();
 
-            Log.d(Globals.TAG, "Phone: " + phone);
-            Log.d(Globals.TAG, "Password " + password);
-
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(Globals.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
@@ -114,18 +114,31 @@ public class LoginFragment extends Fragment {
                                 Toast.makeText(getContext(), "تم تسجيل الدخول", Toast.LENGTH_LONG).show();
                                 Globals.token = sharedPreferences.getString(Globals.USER_TOKEN, "");
                                 Globals.phone = sharedPreferences.getString(Globals.USER_PHONE, "");
+
+                                FirebaseFirestore.getInstance()
+                                        .collection("users")
+                                        .whereEqualTo("phone", response.getUserData().getPhone())
+                                        .get()
+                                        .addOnCompleteListener(task -> {
+                                            if (Objects.requireNonNull(task.getResult()).size() > 0) {
+                                                Map<String, Object> newData = new HashMap<>();
+
+                                                newData.put("fcmToken", Globals.fcmToken);
+                                                FirebaseFirestore.getInstance().collection("users")
+                                                        .document(Objects.requireNonNull(task.getResult()).getDocuments().get(0).getId())
+                                                        .update(newData);
+                                            }
+
+                                        });
                                 getActivity().finish();
                             }
                         } else {
-                            Log.d(Globals.TAG, response.getErrors()[0]);
                             Toast.makeText(getContext(), response.getErrors()[0], Toast.LENGTH_LONG).show();
                         }
 
 
                     },
-                    loginError -> {
-                        Toast.makeText(getContext(), loginError.getMessage(), Toast.LENGTH_LONG).show();
-                    }
+                    loginError -> Toast.makeText(getContext(), loginError.getMessage(), Toast.LENGTH_LONG).show()
             );
 
             Globals.compositeDisposable.add(disposable);
