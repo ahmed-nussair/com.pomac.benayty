@@ -3,6 +3,7 @@ package com.pomac.benayty.view.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,9 @@ import androidx.fragment.app.Fragment;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
+import com.pomac.benayty.apis.FcmTokenUpdateApi;
 import com.pomac.benayty.apis.LoginApi;
+import com.pomac.benayty.model.response.FcmTokenUpdateResponse;
 import com.pomac.benayty.model.response.LoginResponse;
 import com.pomac.benayty.view.interfaces.AppLoginNavigator;
 
@@ -115,6 +118,8 @@ public class LoginFragment extends Fragment {
                                 Globals.token = sharedPreferences.getString(Globals.USER_TOKEN, "");
                                 Globals.phone = sharedPreferences.getString(Globals.USER_PHONE, "");
 
+                                updateFcmToken();
+
                                 FirebaseFirestore.getInstance()
                                         .collection("users")
                                         .whereEqualTo("phone", response.getUserData().getPhone())
@@ -143,5 +148,26 @@ public class LoginFragment extends Fragment {
 
             Globals.compositeDisposable.add(disposable);
         });
+    }
+
+    private void updateFcmToken() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Globals.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build();
+
+        FcmTokenUpdateApi api = retrofit.create(FcmTokenUpdateApi.class);
+
+        Observable<FcmTokenUpdateResponse> observable = api.updateFcmToken(Globals.token, Globals.fcmToken)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        Disposable disposable = observable.subscribe(
+                response -> Log.d(Globals.TAG, response.getMessage()),
+                error -> Log.e(Globals.TAG, Objects.requireNonNull(error.getMessage()))
+        );
+
+        Globals.compositeDisposable.add(disposable);
     }
 }

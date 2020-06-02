@@ -57,7 +57,7 @@ public class BenaytyMessagingService extends FirebaseMessagingService {
         super.onNewToken(s);
 
         Log.d(Globals.TAG, "New FCM token: " + s);
-        sendRegistrationToServer(s);
+//        sendRegistrationToServer(s);
 
         SharedPreferences sharedPreferences = getSharedPreferences(Globals.SHARED_PREFERENCES, MODE_PRIVATE);
 

@@ -13,8 +13,8 @@ public interface RegisterApi {
     @POST("benaity/public/api/users/register")
     Observable<RegisterResponse> register(
             @Field("name") String name,
-            @Field("phone") String email,
-            @Field("email") String phone,
+            @Field("email") String email,
+            @Field("phone") String phone,
             @Field("password") String password
     );
 }
