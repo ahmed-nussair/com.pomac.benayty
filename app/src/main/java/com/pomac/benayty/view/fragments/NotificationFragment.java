@@ -29,6 +29,7 @@ public class NotificationFragment extends Fragment {
     private ProgressBar notificationsProgressBar;
     private RecyclerView notificationsRecyclerView;
     private TextView noNotificationsTextView;
+    private TextView notificationsLoginFirstTextView;
 
     public NotificationFragment() {
         // Required empty public constructor
@@ -43,6 +44,7 @@ public class NotificationFragment extends Fragment {
         notificationsProgressBar = view.findViewById(R.id.notificationsProgressBar);
         notificationsRecyclerView = view.findViewById(R.id.notificationsRecyclerView);
         noNotificationsTextView = view.findViewById(R.id.noNotificationsTextView);
+        notificationsLoginFirstTextView = view.findViewById(R.id.notificationsLoginFirstTextView);
         return view;
     }
 
@@ -52,6 +54,12 @@ public class NotificationFragment extends Fragment {
 
         assert getActivity() != null;
         navigator = (AppNavigator) getActivity();
+
+        if (Globals.token.isEmpty()) {
+            notificationsProgressBar.setVisibility(View.GONE);
+            notificationsLoginFirstTextView.setVisibility(View.VISIBLE);
+            return;
+        }
 
         if (Globals.notificationsData.size() <= 0) {
             notificationsProgressBar.setVisibility(View.GONE);

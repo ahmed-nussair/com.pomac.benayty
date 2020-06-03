@@ -13,6 +13,16 @@
         android:indeterminateDrawable="@drawable/progress" />
 
     <TextView
+        android:id="@+id/notificationsLoginFirstTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/cairo_bold"
+        android:gravity="center"
+        android:text="@string/login_first"
+        android:textColor="@color/appColor"
+        android:visibility="gone" />
+
+    <TextView
         android:id="@+id/noNotificationsTextView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -9,6 +9,7 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,8 @@ public class AddingAdPag1Fragment extends Fragment implements AdFilter {
     private TextView areaAdField;
     private TextView cityAdField;
     private TextView addingAddNextPageButton;
+    private TextView addingAdLoginFirstTextView;
+    private LinearLayout addingAdLayout;
 
     private AppNavigator navigator;
 
@@ -55,6 +58,8 @@ public class AddingAdPag1Fragment extends Fragment implements AdFilter {
         areaAdField = view.findViewById(R.id.areaAdField);
         cityAdField = view.findViewById(R.id.cityAdField);
         addingAddNextPageButton = view.findViewById(R.id.addingAddNextPageButton);
+        addingAdLoginFirstTextView = view.findViewById(R.id.addingAdLoginFirstTextView);
+        addingAdLayout = view.findViewById(R.id.addingAdLayout);
 
         return view;
     }
@@ -62,6 +67,12 @@ public class AddingAdPag1Fragment extends Fragment implements AdFilter {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        if (Globals.token.isEmpty()) {
+            addingAdLoginFirstTextView.setVisibility(View.VISIBLE);
+            addingAdLayout.setVisibility(View.GONE);
+            return;
+        }
 
         assert getActivity() != null;
         navigator = (AppNavigator) getActivity();

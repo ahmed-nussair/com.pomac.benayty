@@ -110,4 +110,6 @@
 
     <string name="no_notifications">ليس لديك أي إشعارات</string>
 
+    <string name="login_first_to_add_ad">قم بتسجيل الدخول أولاً حتى تتمكن من إضافة إعلان</string>
+
 </resources>

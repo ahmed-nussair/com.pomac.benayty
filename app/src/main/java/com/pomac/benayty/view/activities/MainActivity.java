@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
 
         String flag = getIntent().getStringExtra("flag");
 
+        assert flag != null;
         if (flag.equals("new_comment")) {
             int adId = getIntent().getIntExtra("id", 0);
             navigateToAdDetails(adId, "");
@@ -429,5 +430,6 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
         SharedPreferences sharedPreferences = getSharedPreferences(Globals.SHARED_PREFERENCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove(Globals.APP_STATUS);
+        editor.commit();
     }
 }

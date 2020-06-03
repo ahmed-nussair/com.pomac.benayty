@@ -28,7 +28,11 @@ public class BenaytyMessagingService extends FirebaseMessagingService {
         SharedPreferences sharedPreferences = getSharedPreferences(Globals.SHARED_PREFERENCES, MODE_PRIVATE);
 
         if (sharedPreferences.contains(Globals.APP_STATUS)) {
-            Globals.notificationsData.add(remoteMessage.getData().toString());
+            Log.d(Globals.TAG, remoteMessage.getData().toString());
+
+            Globals.notificationsData.add(remoteMessage.getData());
+
+            Log.d(Globals.TAG, "" + Globals.notificationsData.size());
         } else {
             try {
                 String moreDataString = remoteMessage.getData().get("moredata");
@@ -41,8 +45,6 @@ public class BenaytyMessagingService extends FirebaseMessagingService {
 
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "")
                         .setSmallIcon(R.mipmap.ic_launcher)
-//                        .setContentText(Objects.requireNonNull(remoteMessage.getData().get("message")).toString())
-//                        .setContentIntent(pendingIntent)
                         .setAutoCancel(true)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 

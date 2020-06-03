@@ -1,6 +1,7 @@
 package com.pomac.benayty.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,19 +10,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdapter.NotificationsViewHolder> {
 
     private Context context;
-    private List<String> notificationsData;
+    private List<Map<String, String>> notificationsData;
 
-    public NotificationsAdapter(Context context, List<String> notificationsData) {
+    public NotificationsAdapter(Context context, List<Map<String, String>> notificationsData) {
         this.context = context;
         this.notificationsData = notificationsData;
     }
@@ -35,12 +40,16 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
     @Override
     public void onBindViewHolder(@NonNull NotificationsViewHolder holder, int position) {
-        try {
-            JSONObject jsonObject = new JSONObject(notificationsData.get(position));
-            holder.notificationTextView.setText(jsonObject.get("message").toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
+        holder.notificationTextView.setText(notificationsData.get(position).get("message"));
+
+        Calendar calendar = Calendar.getInstance();
+
+        if (calendar.get(Calendar.AM_PM) == Calendar.PM) {
+            holder.notificationTimeTextView.setText(String.format(Locale.US, "%d:%d PM", calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE)));
+        } else {
+            holder.notificationTimeTextView.setText(String.format(Locale.US, "%d:%d AM", calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE)));
         }
+
     }
 
     @Override
@@ -51,10 +60,12 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     static class NotificationsViewHolder extends RecyclerView.ViewHolder {
 
         TextView notificationTextView;
+        TextView notificationTimeTextView;
 
         public NotificationsViewHolder(@NonNull View itemView) {
             super(itemView);
             notificationTextView = itemView.findViewById(R.id.notificationTextView);
+            notificationTimeTextView = itemView.findViewById(R.id.notificationTimeTextView);
         }
     }
 }
