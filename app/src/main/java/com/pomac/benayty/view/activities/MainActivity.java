@@ -74,6 +74,13 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
 
         navigateToMainPage();
 
+        String flag = getIntent().getStringExtra("flag");
+
+        if (flag.equals("new_comment")) {
+            int adId = getIntent().getIntExtra("id", 0);
+            navigateToAdDetails(adId, "");
+        }
+
     }
 
     private void attachListenersForViews() {
@@ -407,11 +414,20 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
     }
 
     @Override
+    public void setTitle(String title) {
+        pageTitle.setText(title);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         Globals.compositeDisposable.dispose();
-        if(Globals.compositeDisposable.isDisposed()) {
+        if (Globals.compositeDisposable.isDisposed()) {
             Log.d(Globals.TAG, "Disposed successfully");
         }
+
+        SharedPreferences sharedPreferences = getSharedPreferences(Globals.SHARED_PREFERENCES, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(Globals.APP_STATUS);
     }
 }

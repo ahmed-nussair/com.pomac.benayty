@@ -42,6 +42,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ChattingActivity extends AppCompatActivity {
 
+    private String from;
+    private String to;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,11 +54,8 @@ public class ChattingActivity extends AppCompatActivity {
         ((ImageView) findViewById(R.id.backToMain)).setOnClickListener(v -> finish());
 
 
-        String from = getIntent().getStringExtra(Globals.FROM);
-        String to = getIntent().getStringExtra(Globals.TO);
-
-        Log.d(Globals.TAG, "From: " + from);
-        Log.d(Globals.TAG, "To: " + to);
+        from = getIntent().getStringExtra(Globals.FROM);
+        to = getIntent().getStringExtra(Globals.TO);
 
 
         ((ImageView) findViewById(R.id.sendMessageButtonImageView)).setOnClickListener(v -> {
@@ -72,9 +72,7 @@ public class ChattingActivity extends AppCompatActivity {
             FirebaseFirestore.getInstance().collection("messages").add(data);
             chattingEditText.setText("");
 
-            // Send notification to the user has the (from) phone
-
-            sendNotificationToUser(from);
+            sendNotificationToUser(chattingEditText.getText().toString());
         });
 
         FirebaseFirestore.getInstance().collection("messages")
@@ -105,32 +103,40 @@ public class ChattingActivity extends AppCompatActivity {
                 });
     }
 
-    private void sendNotificationToUser(String userPhone) {
+    private void sendNotificationToUser(String message) {
         FirebaseFirestore.getInstance().collection("users")
                 .get()
                 .addOnCompleteListener(task -> {
 
                     String fcmToken = "";
+                    String userName = "";
                     for (DocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
                         String phone = Objects.requireNonNull(documentSnapshot.get("phone")).toString();
 
-                        if (phone.equals(userPhone)) {
+                        if (phone.equals(from)) {
                             fcmToken = Objects.requireNonNull(documentSnapshot.get("fcmToken")).toString();
+                            userName = Objects.requireNonNull(documentSnapshot.get("name")).toString();
                             break;
                         }
                     }
 
-                    Map<String, String> notification = new HashMap<>();
+                    Log.d(Globals.TAG, "FCM: " + fcmToken);
 
-                    notification.put("title", "رسالة جديدة");
-                    notification.put("body", "مستخدم أرسل لك رسالة جديدة");
-                    notification.put("sound", "default");
+                    Map<String, Object> moreData = new HashMap<>();
+
+                    moreData.put("type", 3);
+                    moreData.put("phone", to);
+
+                    Map<String, Object> data = new HashMap<>();
+
+                    data.put("moredata", moreData);
+                    data.put("userName", userName);
+                    data.put("message", message);
 
                     Map<String, Object> body = new HashMap<>();
 
-                    Log.d(Globals.TAG, "FCM Token: " + fcmToken);
                     body.put("to", fcmToken);
-                    body.put("notification", notification);
+                    body.put("data", data);
                     body.put("priority", "high");
 
                     Retrofit retrofit = new Retrofit.Builder()
@@ -144,7 +150,6 @@ public class ChattingActivity extends AppCompatActivity {
                     Observable<FcmSendResponse> fcmSendResponseObservable = fcmSendApi.send(Globals.FCM_AUTHORIZATION, body)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread());
-                    ;
 
                     Globals.compositeDisposable.add(fcmSendResponseObservable.subscribe(
                             fcmSendResponse -> {

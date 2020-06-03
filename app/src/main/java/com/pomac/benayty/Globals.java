@@ -140,4 +140,7 @@ public class Globals {
      * For storing user token
      */
     public static String fcmToken = "";
+
+    public static final String APP_STATUS = "app_status";
+    public static final String IS_RUNNING = "is_running";
 }

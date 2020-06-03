@@ -1,24 +1,23 @@
 package com.pomac.benayty;
 
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.pomac.benayty.apis.FcmTokenUpdateApi;
-import com.pomac.benayty.model.response.FcmTokenUpdateResponse;
+import com.pomac.benayty.view.activities.ChattingActivity;
+import com.pomac.benayty.view.activities.MainActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Objects;
-
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class BenaytyMessagingService extends FirebaseMessagingService {
 
@@ -26,30 +25,61 @@ public class BenaytyMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(Globals.TAG, "From: " + remoteMessage.getFrom());
+        try {
+            String moreDataString = remoteMessage.getData().get("moredata");
 
-        // Check if message contains a data payload.
-        if (remoteMessage.getData().size() > 0) {
-            Log.d(Globals.TAG, "Message data payload: " + remoteMessage.getData());
-//
-//            if (/* Check if data needs to be processed by long running job */ true) {
-//                // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
-//                scheduleJob();
-//            } else {
-//                // Handle message within 10 seconds
-//                handleNow();
-//            }
+            assert moreDataString != null;
 
+            JSONObject moreData = new JSONObject(moreDataString);
+
+            int type = Integer.parseInt(moreData.get("type").toString());
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "")
+                    .setSmallIcon(R.mipmap.ic_launcher)
+//                        .setContentText(Objects.requireNonNull(remoteMessage.getData().get("message")).toString())
+//                        .setContentIntent(pendingIntent)
+                    .setAutoCancel(true)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+            Intent intent = null;
+            switch (type) {
+                case 1:
+                    intent = new Intent(this, MainActivity.class);
+                    intent.putExtra("flag", "new_comment");
+                    intent.putExtra("id", Integer.parseInt(moreData.get("advertisement_id").toString()));
+
+                    builder.setContentTitle(remoteMessage.getData().get("message"));
+                    break;
+                case 3:
+                    String userName = remoteMessage.getData().get("userName");
+                    String from = moreData.getString("phone");
+
+                    SharedPreferences sharedPreferences = getSharedPreferences(Globals.SHARED_PREFERENCES, MODE_PRIVATE);
+
+                    String to = sharedPreferences.getString(Globals.USER_PHONE, "");
+
+                    intent = new Intent(this, ChattingActivity.class);
+                    intent.putExtra(Globals.USER_NAME, userName);
+                    intent.putExtra(Globals.FROM, from);
+                    intent.putExtra(Globals.TO, to);
+
+                    builder.setContentTitle("رسالة من " + userName);
+                    builder.setContentText(Objects.requireNonNull(remoteMessage.getData().get("message")));
+                    break;
+            }
+
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+            builder.setContentIntent(pendingIntent);
+
+            Log.d(Globals.TAG, "Type: " + type);
+
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+            notificationManager.notify((int) System.currentTimeMillis(), builder.build());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-
-        // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            Log.d(Globals.TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-        }
-
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
     }
 
     @Override
@@ -68,26 +98,5 @@ public class BenaytyMessagingService extends FirebaseMessagingService {
         if (editor.commit()) {
             Log.d(Globals.TAG, "FCM Token: " + sharedPreferences.getString(Globals.FCM_TOKEN, ""));
         }
-    }
-
-    private void sendRegistrationToServer(String s) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Globals.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build();
-
-        FcmTokenUpdateApi api = retrofit.create(FcmTokenUpdateApi.class);
-
-        Observable<FcmTokenUpdateResponse> observable = api.updateFcmToken(Globals.token, s)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        Disposable disposable = observable.subscribe(
-                response -> Log.d(Globals.TAG, response.getMessage()),
-                error -> Log.e(Globals.TAG, Objects.requireNonNull(error.getMessage()))
-        );
-
-        Globals.compositeDisposable.add(disposable);
     }
 }

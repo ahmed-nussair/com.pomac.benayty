@@ -111,6 +111,7 @@ public class AdDetailsFragment extends Fragment {
         adViewModel.showAdvertisement(adId).observe(
                 getActivity(),
                 response -> {
+                    navigator.setTitle(response.getData().getTitle());
                     messageFrameLayout.setOnClickListener(v -> {
                         if (Globals.token.isEmpty()) {
                             Toast.makeText(getContext(), "قم بتسجيل الدخول أولاً حتى تتمكن من مراسلة صاحب الإعلان", Toast.LENGTH_LONG).show();
