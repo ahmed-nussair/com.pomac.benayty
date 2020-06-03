@@ -12,6 +12,16 @@
         android:layout_gravity="center"
         android:indeterminateDrawable="@drawable/progress" />
 
+    <TextView
+        android:id="@+id/noNotificationsTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/cairo_bold"
+        android:gravity="center"
+        android:text="@string/no_notifications"
+        android:textColor="@color/appColor"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/notificationsRecyclerView"
         android:layout_width="match_parent"

@@ -25,61 +25,67 @@ public class BenaytyMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        try {
-            String moreDataString = remoteMessage.getData().get("moredata");
+        SharedPreferences sharedPreferences = getSharedPreferences(Globals.SHARED_PREFERENCES, MODE_PRIVATE);
 
-            assert moreDataString != null;
+        if (sharedPreferences.contains(Globals.APP_STATUS)) {
+            Globals.notificationsData.add(remoteMessage.getData().toString());
+        } else {
+            try {
+                String moreDataString = remoteMessage.getData().get("moredata");
 
-            JSONObject moreData = new JSONObject(moreDataString);
+                assert moreDataString != null;
 
-            int type = Integer.parseInt(moreData.get("type").toString());
+                JSONObject moreData = new JSONObject(moreDataString);
 
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "")
-                    .setSmallIcon(R.mipmap.ic_launcher)
+                int type = Integer.parseInt(moreData.get("type").toString());
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "")
+                        .setSmallIcon(R.mipmap.ic_launcher)
 //                        .setContentText(Objects.requireNonNull(remoteMessage.getData().get("message")).toString())
 //                        .setContentIntent(pendingIntent)
-                    .setAutoCancel(true)
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                        .setAutoCancel(true)
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-            Intent intent = null;
-            switch (type) {
-                case 1:
-                    intent = new Intent(this, MainActivity.class);
-                    intent.putExtra("flag", "new_comment");
-                    intent.putExtra("id", Integer.parseInt(moreData.get("advertisement_id").toString()));
+                Intent intent = null;
+                switch (type) {
+                    case 1:
+                        intent = new Intent(this, MainActivity.class);
+                        intent.putExtra("flag", "new_comment");
+                        intent.putExtra("id", Integer.parseInt(moreData.get("advertisement_id").toString()));
 
-                    builder.setContentTitle(remoteMessage.getData().get("message"));
-                    break;
-                case 3:
-                    String userName = remoteMessage.getData().get("userName");
-                    String from = moreData.getString("phone");
+                        builder.setContentTitle(remoteMessage.getData().get("message"));
+                        break;
+                    case 3:
+                        String userName = remoteMessage.getData().get("userName");
+                        String from = moreData.getString("phone");
 
-                    SharedPreferences sharedPreferences = getSharedPreferences(Globals.SHARED_PREFERENCES, MODE_PRIVATE);
 
-                    String to = sharedPreferences.getString(Globals.USER_PHONE, "");
+                        String to = sharedPreferences.getString(Globals.USER_PHONE, "");
 
-                    intent = new Intent(this, ChattingActivity.class);
-                    intent.putExtra(Globals.USER_NAME, userName);
-                    intent.putExtra(Globals.FROM, from);
-                    intent.putExtra(Globals.TO, to);
+                        intent = new Intent(this, ChattingActivity.class);
+                        intent.putExtra(Globals.USER_NAME, userName);
+                        intent.putExtra(Globals.FROM, from);
+                        intent.putExtra(Globals.TO, to);
 
-                    builder.setContentTitle("رسالة من " + userName);
-                    builder.setContentText(Objects.requireNonNull(remoteMessage.getData().get("message")));
-                    break;
+                        builder.setContentTitle("رسالة من " + userName);
+                        builder.setContentText(Objects.requireNonNull(remoteMessage.getData().get("message")));
+                        break;
+                }
+
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+                builder.setContentIntent(pendingIntent);
+
+                Log.d(Globals.TAG, "Type: " + type);
+
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+                notificationManager.notify((int) System.currentTimeMillis(), builder.build());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-
-            builder.setContentIntent(pendingIntent);
-
-            Log.d(Globals.TAG, "Type: " + type);
-
-            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-            notificationManager.notify((int) System.currentTimeMillis(), builder.build());
-
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
+
     }
 
     @Override

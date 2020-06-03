@@ -1,5 +1,6 @@
 package com.pomac.benayty;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -143,4 +144,6 @@ public class Globals {
 
     public static final String APP_STATUS = "app_status";
     public static final String IS_RUNNING = "is_running";
+
+    public static ArrayList<String> notificationsData = new ArrayList<>();
 }
