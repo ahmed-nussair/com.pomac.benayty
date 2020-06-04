@@ -2,14 +2,6 @@ package com.pomac.benayty.view.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +11,12 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
@@ -36,15 +34,13 @@ import com.pomac.benayty.viewmodel.AdViewModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
-import java.util.Objects;
-
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.internal.EverythingIsNonNull;
 
 
 /**
@@ -156,17 +152,37 @@ public class AdDetailsFragment extends Fragment {
 
                     ShowUserApi showUserApi = retrofit.create(ShowUserApi.class);
 
-                    Observable<ShowUserResponse> showUserResponseObservable = showUserApi.showUser(Integer.parseInt(response.getData().getUserId()))
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread());
+                    Call<ShowUserResponse> showUserResponseCall = showUserApi.showUser(Integer.parseInt(response.getData().getUserId()));
 
-                    Globals.compositeDisposable.add(showUserResponseObservable.subscribe(
-                            showUserResponse -> {
-                                CommentsAdapter adapter = new CommentsAdapter(getActivity(), showUserResponse.getData().getComments());
-                                commentsRecyclerView.setAdapter(adapter);
-                                commentsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                            }
-                    ));
+                    showUserResponseCall.enqueue(new Callback<ShowUserResponse>() {
+
+                        @EverythingIsNonNull
+                        @Override
+                        public void onResponse(Call<ShowUserResponse> call, Response<ShowUserResponse> response) {
+                            assert response.body() != null;
+                            CommentsAdapter adapter = new CommentsAdapter(getActivity(), response.body().getData().getComments());
+                            commentsRecyclerView.setAdapter(adapter);
+                            commentsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        }
+
+                        @EverythingIsNonNull
+                        @Override
+                        public void onFailure(Call<ShowUserResponse> call, Throwable t) {
+
+                        }
+                    });
+
+//                    Observable<ShowUserResponse> showUserResponseObservable = showUserApi.showUser(Integer.parseInt(response.getData().getUserId()))
+//                            .subscribeOn(Schedulers.io())
+//                            .observeOn(AndroidSchedulers.mainThread());
+//
+//                    Globals.compositeDisposable.add(showUserResponseObservable.subscribe(
+//                            showUserResponse -> {
+//                                CommentsAdapter adapter = new CommentsAdapter(getActivity(), showUserResponse.getData().getComments());
+//                                commentsRecyclerView.setAdapter(adapter);
+//                                commentsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//                            }
+//                    ));
                 }
         );
 
@@ -184,22 +200,46 @@ public class AdDetailsFragment extends Fragment {
 
             AddToWishListApi api = retrofit.create(AddToWishListApi.class);
 
-            Observable<AddToWishListResponse> observable = api.addToWishList(Globals.token, adId)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
+            Call<AddToWishListResponse> addToWishListResponseCall = api.addToWishList(Globals.token, adId);
 
-            Disposable disposable = observable.subscribe(
-                    response -> Toast.makeText(
+            addToWishListResponseCall.enqueue(new Callback<AddToWishListResponse>() {
+
+                @EverythingIsNonNull
+                @Override
+                public void onResponse(Call<AddToWishListResponse> call, Response<AddToWishListResponse> response) {
+                    assert response.body() != null;
+                    Toast.makeText(
                             getActivity(),
-                            response.getMessage() != null ?
-                                    response.getMessage()
-                                    : response.getErrors()[0],
+                            response.body().getMessage() != null ?
+                                    response.body().getMessage()
+                                    : response.body().getErrors()[0],
                             Toast.LENGTH_LONG
-                    ).show(),
-                    error -> Toast.makeText(getActivity(), Objects.requireNonNull(error.getMessage()), Toast.LENGTH_LONG).show()
-            );
+                    ).show();
+                }
 
-            Globals.compositeDisposable.add(disposable);
+                @EverythingIsNonNull
+                @Override
+                public void onFailure(Call<AddToWishListResponse> call, Throwable t) {
+
+                }
+            });
+
+//            Observable<AddToWishListResponse> observable = api.addToWishList(Globals.token, adId)
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread());
+//
+//            Disposable disposable = observable.subscribe(
+//                    response -> Toast.makeText(
+//                            getActivity(),
+//                            response.getMessage() != null ?
+//                                    response.getMessage()
+//                                    : response.getErrors()[0],
+//                            Toast.LENGTH_LONG
+//                    ).show(),
+//                    error -> Toast.makeText(getActivity(), Objects.requireNonNull(error.getMessage()), Toast.LENGTH_LONG).show()
+//            );
+//
+//            Globals.compositeDisposable.add(disposable);
         });
 
         commentFrameLayout.setOnClickListener(v -> {

@@ -422,14 +422,17 @@ public class MainActivity extends AppCompatActivity implements AppNavigator {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Globals.compositeDisposable.dispose();
-        if (Globals.compositeDisposable.isDisposed()) {
-            Log.d(Globals.TAG, "Disposed successfully");
-        }
+
 
         SharedPreferences sharedPreferences = getSharedPreferences(Globals.SHARED_PREFERENCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove(Globals.APP_STATUS);
-        editor.commit();
+        if (editor.commit()) {
+            Globals.compositeDisposable.dispose();
+            Globals.compositeDisposable.clear();
+            if (Globals.compositeDisposable.isDisposed()) {
+                Log.d(Globals.TAG, "Disposed successfully");
+            }
+        }
     }
 }

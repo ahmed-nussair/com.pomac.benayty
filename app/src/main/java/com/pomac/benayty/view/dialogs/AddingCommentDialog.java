@@ -19,10 +19,13 @@ import com.pomac.benayty.model.response.AddingCommentResponse;
 
 import java.util.Objects;
 
-import io.reactivex.Observable;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.internal.EverythingIsNonNull;
 
 public class AddingCommentDialog extends Dialog {
 
@@ -70,31 +73,63 @@ public class AddingCommentDialog extends Dialog {
 
             AddingCommentApi addingCommentApi = retrofit.create(AddingCommentApi.class);
 
-            Observable<AddingCommentResponse> addingCommentResponseObservable =
-                    addingCommentApi.addComment(
-                            Globals.token,
-                            adId,
-                            commentEditText.getText().toString()
-                    );
+            Call<AddingCommentResponse> addingCommentResponseCall = addingCommentApi.addComment(
+                    Globals.token,
+                    adId,
+                    commentEditText.getText().toString()
+            );
 
-            Globals.compositeDisposable.add(addingCommentResponseObservable.subscribe(
-                    addingCommentResponse -> {
-                        Toast.makeText(fragment.getContext(),
-                                addingCommentResponse.getMessage() != null ? addingCommentResponse.getMessage() : "null",
-                                Toast.LENGTH_LONG)
-                                .show();
+            addingCommentResponseCall.enqueue(new Callback<AddingCommentResponse>() {
 
-                        dismiss();
-                    },
-                    addingCommentError -> {
-                        Toast.makeText(fragment.getContext(),
-                                "Error adding comment!",
-                                Toast.LENGTH_LONG)
-                                .show();
+                @EverythingIsNonNull
+                @Override
+                public void onResponse(Call<AddingCommentResponse> call, Response<AddingCommentResponse> response) {
+                    assert response.body() != null;
+                    Toast.makeText(fragment.getContext(),
+                            response.body().getMessage() != null ? response.body().getMessage() : "null",
+                            Toast.LENGTH_LONG)
+                            .show();
 
-                        dismiss();
-                    }
-            ));
+                    dismiss();
+                }
+
+                @EverythingIsNonNull
+                @Override
+                public void onFailure(Call<AddingCommentResponse> call, Throwable t) {
+                    Toast.makeText(fragment.getContext(),
+                            "Error adding comment!",
+                            Toast.LENGTH_LONG)
+                            .show();
+
+                    dismiss();
+                }
+            });
+
+//            Observable<AddingCommentResponse> addingCommentResponseObservable =
+//                    addingCommentApi.addComment(
+//                            Globals.token,
+//                            adId,
+//                            commentEditText.getText().toString()
+//                    );
+//
+//            Globals.compositeDisposable.add(addingCommentResponseObservable.subscribe(
+//                    addingCommentResponse -> {
+//                        Toast.makeText(fragment.getContext(),
+//                                addingCommentResponse.getMessage() != null ? addingCommentResponse.getMessage() : "null",
+//                                Toast.LENGTH_LONG)
+//                                .show();
+//
+//                        dismiss();
+//                    },
+//                    addingCommentError -> {
+//                        Toast.makeText(fragment.getContext(),
+//                                "Error adding comment!",
+//                                Toast.LENGTH_LONG)
+//                                .show();
+//
+//                        dismiss();
+//                    }
+//            ));
         });
     }
 }

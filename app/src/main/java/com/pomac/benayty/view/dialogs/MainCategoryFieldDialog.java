@@ -37,12 +37,13 @@ import com.pomac.benayty.view.interfaces.OnSecondaryCategorySelected;
 
 import java.util.Objects;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.internal.EverythingIsNonNull;
 
 public class MainCategoryFieldDialog extends Dialog implements
         OnMainCategorySelected,
@@ -87,42 +88,65 @@ public class MainCategoryFieldDialog extends Dialog implements
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
-        switch (type){
+        switch (type) {
             case MainCategoryField:
                 dialogTitle.setText(fragment.getResources().getString(R.string.choose_main_item));
 
                 MainCategoriesApi mainCategoriesApi = retrofit.create(MainCategoriesApi.class);
 
-                Observable<MainCategoriesResponse> mainCategoriesResponseObservable = mainCategoriesApi.getMainCategories()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread());
+                Call<MainCategoriesResponse> mainCategoriesResponseCall = mainCategoriesApi.getMainCategories();
 
-                Globals.compositeDisposable.add(mainCategoriesResponseObservable.subscribe(response -> {
-                    MainCategoriesForAddingAdAdapter adapter = new MainCategoriesForAddingAdAdapter(fragment.getContext(), response.getData(), this);
-                    fieldRecyclerView.setAdapter(adapter);
-                    fieldRecyclerView.setLayoutManager(new LinearLayoutManager(fragment.getContext()));
+                OnMainCategorySelected handler = this;
+                mainCategoriesResponseCall.enqueue(new Callback<MainCategoriesResponse>() {
 
-                    fieldDialogProgressBar.setVisibility(View.GONE);
-                    fieldRecyclerView.setVisibility(View.VISIBLE);
-                }));
+                    @EverythingIsNonNull
+                    @Override
+                    public void onResponse(Call<MainCategoriesResponse> call, Response<MainCategoriesResponse> response) {
+                        assert response.body() != null;
+                        MainCategoriesForAddingAdAdapter adapter = new MainCategoriesForAddingAdAdapter(fragment.getContext(), response.body().getData(), handler);
+                        fieldRecyclerView.setAdapter(adapter);
+                        fieldRecyclerView.setLayoutManager(new LinearLayoutManager(fragment.getContext()));
+
+                        fieldDialogProgressBar.setVisibility(View.GONE);
+                        fieldRecyclerView.setVisibility(View.VISIBLE);
+                    }
+
+                    @EverythingIsNonNull
+                    @Override
+                    public void onFailure(Call<MainCategoriesResponse> call, Throwable t) {
+
+                    }
+                });
                 break;
             case SecondaryCategoryField:
                 dialogTitle.setText(fragment.getResources().getString(R.string.choose_secondary_item));
 
                 SecondaryCategoriesApi secondaryCategoriesApi = retrofit.create(SecondaryCategoriesApi.class);
 
-                Observable<SecondaryCategoriesResponse> secondaryCategoriesResponseObservable = secondaryCategoriesApi.getSecondaryCategories(adFilter.getMainCategoryId())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread());
+                Call<SecondaryCategoriesResponse> secondaryCategoriesResponseCall = secondaryCategoriesApi.getSecondaryCategories(adFilter.getMainCategoryId());
 
-                Globals.compositeDisposable.add(secondaryCategoriesResponseObservable.subscribe(response -> {
-                    SecondaryCategoriesAdapter adapter = new SecondaryCategoriesAdapter(fragment.getContext(), response.getData(), this);
-                    fieldRecyclerView.setAdapter(adapter);
-                    fieldRecyclerView.setLayoutManager(new LinearLayoutManager(fragment.getContext()));
+                OnSecondaryCategorySelected onSecondaryCategorySelected = this;
 
-                    fieldDialogProgressBar.setVisibility(View.GONE);
-                    fieldRecyclerView.setVisibility(View.VISIBLE);
-                }));
+                secondaryCategoriesResponseCall.enqueue(new Callback<SecondaryCategoriesResponse>() {
+
+                    @EverythingIsNonNull
+                    @Override
+                    public void onResponse(Call<SecondaryCategoriesResponse> call, Response<SecondaryCategoriesResponse> response) {
+                        assert response.body() != null;
+                        SecondaryCategoriesAdapter adapter = new SecondaryCategoriesAdapter(fragment.getContext(), response.body().getData(), onSecondaryCategorySelected);
+                        fieldRecyclerView.setAdapter(adapter);
+                        fieldRecyclerView.setLayoutManager(new LinearLayoutManager(fragment.getContext()));
+
+                        fieldDialogProgressBar.setVisibility(View.GONE);
+                        fieldRecyclerView.setVisibility(View.VISIBLE);
+                    }
+
+                    @EverythingIsNonNull
+                    @Override
+                    public void onFailure(Call<SecondaryCategoriesResponse> call, Throwable t) {
+
+                    }
+                });
 
                 break;
             case AreaField:
@@ -130,18 +154,30 @@ public class MainCategoryFieldDialog extends Dialog implements
 
                 AreasApi areasApi = retrofit.create(AreasApi.class);
 
-                Observable<AreasResponse> areasResponseObservable = areasApi.getAreas()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread());
+                Call<AreasResponse> areasResponseCall = areasApi.getAreas();
 
-                Globals.compositeDisposable.add(areasResponseObservable.subscribe(response -> {
-                    AreasAdapter adapter = new AreasAdapter(fragment.getContext(), response.getData(), this);
-                    fieldRecyclerView.setAdapter(adapter);
-                    fieldRecyclerView.setLayoutManager(new LinearLayoutManager(fragment.getContext()));
+                OnAreaSelected onAreaSelected = this;
 
-                    fieldDialogProgressBar.setVisibility(View.GONE);
-                    fieldRecyclerView.setVisibility(View.VISIBLE);
-                }));
+                areasResponseCall.enqueue(new Callback<AreasResponse>() {
+
+                    @EverythingIsNonNull
+                    @Override
+                    public void onResponse(Call<AreasResponse> call, Response<AreasResponse> response) {
+                        assert response.body() != null;
+                        AreasAdapter adapter = new AreasAdapter(fragment.getContext(), response.body().getData(), onAreaSelected);
+                        fieldRecyclerView.setAdapter(adapter);
+                        fieldRecyclerView.setLayoutManager(new LinearLayoutManager(fragment.getContext()));
+
+                        fieldDialogProgressBar.setVisibility(View.GONE);
+                        fieldRecyclerView.setVisibility(View.VISIBLE);
+                    }
+
+                    @EverythingIsNonNull
+                    @Override
+                    public void onFailure(Call<AreasResponse> call, Throwable t) {
+
+                    }
+                });
 
                 break;
             case CityField:
@@ -149,20 +185,30 @@ public class MainCategoryFieldDialog extends Dialog implements
 
                 CitiesApi citiesApi = retrofit.create(CitiesApi.class);
 
-                Observable<CitiesResponse> citiesResponseObservable = citiesApi.getCities(adFilter.getAreaId())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread());
+                OnCitySelected onCitySelected = this;
 
-                Globals.compositeDisposable.add(citiesResponseObservable.subscribe(
-                        response -> {
-                            CitiesAdapter adapter = new CitiesAdapter(fragment.getContext(), response.getData(), this);
-                            fieldRecyclerView.setAdapter(adapter);
-                            fieldRecyclerView.setLayoutManager(new LinearLayoutManager(fragment.getContext()));
+                Call<CitiesResponse> citiesResponseCall = citiesApi.getCities(adFilter.getAreaId());
 
-                            fieldDialogProgressBar.setVisibility(View.GONE);
-                            fieldRecyclerView.setVisibility(View.VISIBLE);
-                        }
-                ));
+                citiesResponseCall.enqueue(new Callback<CitiesResponse>() {
+
+                    @EverythingIsNonNull
+                    @Override
+                    public void onResponse(Call<CitiesResponse> call, Response<CitiesResponse> response) {
+                        assert response.body() != null;
+                        CitiesAdapter adapter = new CitiesAdapter(fragment.getContext(), response.body().getData(), onCitySelected);
+                        fieldRecyclerView.setAdapter(adapter);
+                        fieldRecyclerView.setLayoutManager(new LinearLayoutManager(fragment.getContext()));
+
+                        fieldDialogProgressBar.setVisibility(View.GONE);
+                        fieldRecyclerView.setVisibility(View.VISIBLE);
+                    }
+
+                    @EverythingIsNonNull
+                    @Override
+                    public void onFailure(Call<CitiesResponse> call, Throwable t) {
+
+                    }
+                });
 
                 break;
         }

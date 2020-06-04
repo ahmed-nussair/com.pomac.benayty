@@ -8,13 +8,13 @@ import com.pomac.benayty.Globals;
 import com.pomac.benayty.apis.ShowAdvertisementApi;
 import com.pomac.benayty.model.response.ShowAdvertisementResponse;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.internal.EverythingIsNonNull;
 
 public class AdViewModel extends ViewModel {
 
@@ -37,14 +37,21 @@ public class AdViewModel extends ViewModel {
 
         ShowAdvertisementApi api = retrofit.create(ShowAdvertisementApi.class);
 
-        Observable<ShowAdvertisementResponse> observable = api.showAdvertisement(adId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        Call<ShowAdvertisementResponse> showAdvertisementResponseCall = api.showAdvertisement(adId);
 
-        Disposable disposable = observable.subscribe(
-                response -> mutableLiveData.setValue(response)
-        );
+        showAdvertisementResponseCall.enqueue(new Callback<ShowAdvertisementResponse>() {
 
-        Globals.compositeDisposable.add(disposable);
+            @EverythingIsNonNull
+            @Override
+            public void onResponse(Call<ShowAdvertisementResponse> call, Response<ShowAdvertisementResponse> response) {
+                mutableLiveData.setValue(response.body());
+            }
+
+            @EverythingIsNonNull
+            @Override
+            public void onFailure(Call<ShowAdvertisementResponse> call, Throwable t) {
+
+            }
+        });
     }
 }

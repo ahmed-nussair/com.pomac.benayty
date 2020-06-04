@@ -4,26 +4,21 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.pomac.benayty.apis.FcmSendApi;
-import com.pomac.benayty.model.response.FcmSendResponse;
-import com.pomac.benayty.view.helperclasses.ChattingMessage;
 import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
 import com.pomac.benayty.adapters.ChattingAdapter;
+import com.pomac.benayty.apis.FcmSendApi;
+import com.pomac.benayty.model.response.FcmSendResponse;
+import com.pomac.benayty.view.helperclasses.ChattingMessage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,12 +28,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.internal.EverythingIsNonNull;
 
 public class ChattingActivity extends AppCompatActivity {
 
@@ -147,19 +143,40 @@ public class ChattingActivity extends AppCompatActivity {
 
                     FcmSendApi fcmSendApi = retrofit.create(FcmSendApi.class);
 
-                    Observable<FcmSendResponse> fcmSendResponseObservable = fcmSendApi.send(Globals.FCM_AUTHORIZATION, body)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread());
+                    Call<FcmSendResponse> fcmSendResponseCall = fcmSendApi.send(Globals.FCM_AUTHORIZATION, body);
 
-                    Globals.compositeDisposable.add(fcmSendResponseObservable.subscribe(
-                            fcmSendResponse -> {
-                                if (fcmSendResponse.getSuccess() > 0)
-                                    Log.d(Globals.TAG, "" + fcmSendResponse.getResults().get(0).getMessageId());
-                                else
-                                    Log.d(Globals.TAG, "" + fcmSendResponse.getResults().get(0).getError());
-                            },
-                            fcmSendError -> Log.e(Globals.TAG, Objects.requireNonNull(fcmSendError.getMessage()))
-                    ));
+                    fcmSendResponseCall.enqueue(new Callback<FcmSendResponse>() {
+
+                        @EverythingIsNonNull
+                        @Override
+                        public void onResponse(Call<FcmSendResponse> call, Response<FcmSendResponse> response) {
+                            assert response.body() != null;
+                            if (response.body().getSuccess() > 0)
+                                Log.d(Globals.TAG, "" + response.body().getResults().get(0).getMessageId());
+                            else
+                                Log.d(Globals.TAG, "" + response.body().getResults().get(0).getError());
+                        }
+
+                        @EverythingIsNonNull
+                        @Override
+                        public void onFailure(Call<FcmSendResponse> call, Throwable t) {
+                            Log.e(Globals.TAG, Objects.requireNonNull(t.getMessage()));
+                        }
+                    });
+
+//                    Observable<FcmSendResponse> fcmSendResponseObservable = fcmSendApi.send(Globals.FCM_AUTHORIZATION, body)
+//                            .subscribeOn(Schedulers.io())
+//                            .observeOn(AndroidSchedulers.mainThread());
+//
+//                    Globals.compositeDisposable.add(fcmSendResponseObservable.subscribe(
+//                            fcmSendResponse -> {
+//                                if (fcmSendResponse.getSuccess() > 0)
+//                                    Log.d(Globals.TAG, "" + fcmSendResponse.getResults().get(0).getMessageId());
+//                                else
+//                                    Log.d(Globals.TAG, "" + fcmSendResponse.getResults().get(0).getError());
+//                            },
+//                            fcmSendError -> Log.e(Globals.TAG, Objects.requireNonNull(fcmSendError.getMessage()))
+//                    ));
                 });
     }
 }

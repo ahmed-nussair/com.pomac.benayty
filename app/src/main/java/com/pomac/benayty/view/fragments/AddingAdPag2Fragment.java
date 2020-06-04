@@ -43,9 +43,13 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.internal.EverythingIsNonNull;
 
 
 /**
@@ -146,8 +150,7 @@ public class AddingAdPag2Fragment extends Fragment {
             MultipartBody.Part body =
                     MultipartBody.Part.createFormData("image", adImageFile.getName(), requestFile);
 
-
-            Observable<AddingAdResponse> addingAdResponseObservable = addingAdApi.addAdvertisement(
+            Call<AddingAdResponse> addingAdResponseCall = addingAdApi.addAdvertisement(
                     RequestBody.create(MediaType.parse("multipart/form-data"), Globals.token),
                     RequestBody.create(MediaType.parse("multipart/form-data"), "" + mainCategoryId),
                     RequestBody.create(MediaType.parse("multipart/form-data"), "" + secondaryCategoryId),
@@ -157,25 +160,60 @@ public class AddingAdPag2Fragment extends Fragment {
                     RequestBody.create(MediaType.parse("multipart/form-data"), addingAdMobileEditText.getText().toString()),
                     RequestBody.create(MediaType.parse("multipart/form-data"), addingAdDescriptionEditText.getText().toString()),
                     body
-            )
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
-
-            Disposable disposable = addingAdResponseObservable.subscribe(
-                    response -> {
-                        Log.d(Globals.TAG, response.getMessage());
-                        if (response.getStatus() == 200) {
-                            Toast.makeText(getContext(), response.getMessage(), Toast.LENGTH_LONG).show();
-                            navigator.navigateToMainPage();
-                        } else {
-                            Toast.makeText(getContext(), response.getErrors()[0], Toast.LENGTH_LONG).show();
-                        }
-
-                    },
-                    addingAdError -> Toast.makeText(getContext(), addingAdError.getMessage(), Toast.LENGTH_LONG).show()
             );
 
-            Globals.compositeDisposable.add(disposable);
+            addingAdResponseCall.enqueue(new Callback<AddingAdResponse>() {
+
+                @EverythingIsNonNull
+                @Override
+                public void onResponse(Call<AddingAdResponse> call, Response<AddingAdResponse> response) {
+                    assert response.body() != null;
+                    Log.d(Globals.TAG, response.body().getMessage());
+                    if (response.body().getStatus() == 200) {
+                        Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_LONG).show();
+                        navigator.navigateToMainPage();
+                    } else {
+                        Toast.makeText(getContext(), response.body().getErrors()[0], Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @EverythingIsNonNull
+                @Override
+                public void onFailure(Call<AddingAdResponse> call, Throwable t) {
+
+                }
+            });
+
+
+//            Observable<AddingAdResponse> addingAdResponseObservable = addingAdApi.addAdvertisement(
+//                    RequestBody.create(MediaType.parse("multipart/form-data"), Globals.token),
+//                    RequestBody.create(MediaType.parse("multipart/form-data"), "" + mainCategoryId),
+//                    RequestBody.create(MediaType.parse("multipart/form-data"), "" + secondaryCategoryId),
+//                    RequestBody.create(MediaType.parse("multipart/form-data"), "" + areaId),
+//                    RequestBody.create(MediaType.parse("multipart/form-data"), "" + cityId),
+//                    RequestBody.create(MediaType.parse("multipart/form-data"), addingAdNameEditText.getText().toString()),
+//                    RequestBody.create(MediaType.parse("multipart/form-data"), addingAdMobileEditText.getText().toString()),
+//                    RequestBody.create(MediaType.parse("multipart/form-data"), addingAdDescriptionEditText.getText().toString()),
+//                    body
+//            )
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread());
+//
+//            Disposable disposable = addingAdResponseObservable.subscribe(
+//                    response -> {
+//                        Log.d(Globals.TAG, response.getMessage());
+//                        if (response.getStatus() == 200) {
+//                            Toast.makeText(getContext(), response.getMessage(), Toast.LENGTH_LONG).show();
+//                            navigator.navigateToMainPage();
+//                        } else {
+//                            Toast.makeText(getContext(), response.getErrors()[0], Toast.LENGTH_LONG).show();
+//                        }
+//
+//                    },
+//                    addingAdError -> Toast.makeText(getContext(), addingAdError.getMessage(), Toast.LENGTH_LONG).show()
+//            );
+//
+//            Globals.compositeDisposable.add(disposable);
 
         });
 
@@ -189,6 +227,7 @@ public class AddingAdPag2Fragment extends Fragment {
 //            adProposedImageView.setImageURI(data.getData());
 
             assert data != null;
+            assert getActivity() != null;
             Uri uri = data.getData();
             try {
                 adImageBitmap = BitmapFactory.decodeStream(new BufferedInputStream(getActivity().getContentResolver().openInputStream(uri)));

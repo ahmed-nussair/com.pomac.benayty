@@ -22,13 +22,13 @@ import com.pomac.benayty.view.interfaces.AppLoginNavigator;
 
 import java.util.Objects;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.internal.EverythingIsNonNull;
 
 public class CheckingCodeDialog extends Dialog {
 
@@ -91,26 +91,31 @@ public class CheckingCodeDialog extends Dialog {
 
             ForgotPasswordApi forgotPasswordApi = retrofit.create(ForgotPasswordApi.class);
 
+            Call<CodeCheckingResponse> codeCheckingResponseCall = forgotPasswordApi.checkCode(code);
 
-            Observable<CodeCheckingResponse> observable = forgotPasswordApi.checkCode(code)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
+            codeCheckingResponseCall.enqueue(new Callback<CodeCheckingResponse>() {
 
-            Disposable disposable = observable.subscribe(
-                    response -> {
-                        noCodeEnteredTextView.setVisibility(View.GONE);
-                        if (response.getMessage() == null) {
+                @EverythingIsNonNull
+                @Override
+                public void onResponse(Call<CodeCheckingResponse> call, Response<CodeCheckingResponse> response) {
+                    noCodeEnteredTextView.setVisibility(View.GONE);
+                    assert response.body() != null;
+                    if (response.body().getMessage() == null) {
 
-                            wrongCodeTextView.setVisibility(View.VISIBLE);
-                            return;
-                        }
-                        wrongCodeTextView.setVisibility(View.GONE);
-                        dismiss();
-                        navigator.navigateToUpdatePasswordScreen(code);
+                        wrongCodeTextView.setVisibility(View.VISIBLE);
+                        return;
                     }
-            );
+                    wrongCodeTextView.setVisibility(View.GONE);
+                    dismiss();
+                    navigator.navigateToUpdatePasswordScreen(code);
+                }
 
-            Globals.compositeDisposable.add(disposable);
+                @EverythingIsNonNull
+                @Override
+                public void onFailure(Call<CodeCheckingResponse> call, Throwable t) {
+
+                }
+            });
 
 
         });
@@ -127,18 +132,35 @@ public class CheckingCodeDialog extends Dialog {
 
             ForgotPasswordApi forgotPasswordApi = retrofit.create(ForgotPasswordApi.class);
 
-            Observable<ForgotPasswordResponse> observable = forgotPasswordApi.sendForPasswordRecovery(email)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
+            Call<ForgotPasswordResponse> forgotPasswordResponseCall = forgotPasswordApi.sendForPasswordRecovery(email);
 
-            Disposable disposable = observable.subscribe(
-                    response -> {
-                        Toast.makeText(fragment.getContext(), "تم إرسال كود جديد على بريدك الإلكتروني", Toast.LENGTH_LONG).show();
+            forgotPasswordResponseCall.enqueue(new Callback<ForgotPasswordResponse>() {
 
-                    }
-            );
+                @EverythingIsNonNull
+                @Override
+                public void onResponse(Call<ForgotPasswordResponse> call, Response<ForgotPasswordResponse> response) {
+                    Toast.makeText(fragment.getContext(), "تم إرسال كود جديد على بريدك الإلكتروني", Toast.LENGTH_LONG).show();
+                }
 
-            Globals.compositeDisposable.add(disposable);
+                @EverythingIsNonNull
+                @Override
+                public void onFailure(Call<ForgotPasswordResponse> call, Throwable t) {
+
+                }
+            });
+
+//            Observable<ForgotPasswordResponse> observable = forgotPasswordApi.sendForPasswordRecovery(email)
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread());
+//
+//            Disposable disposable = observable.subscribe(
+//                    response -> {
+//                        Toast.makeText(fragment.getContext(), "تم إرسال كود جديد على بريدك الإلكتروني", Toast.LENGTH_LONG).show();
+//
+//                    }
+//            );
+//
+//            Globals.compositeDisposable.add(disposable);
         });
     }
 

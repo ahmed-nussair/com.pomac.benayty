@@ -27,13 +27,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.internal.EverythingIsNonNull;
 
 
 /**
@@ -100,53 +100,106 @@ public class LoginFragment extends Fragment {
 
             LoginApi api = retrofit.create(LoginApi.class);
 
-            Observable<LoginResponse> observable = api.login(phone, password)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
+            Call<LoginResponse> loginResponseCall = api.login(phone, password);
 
-            Disposable disposable = observable.subscribe(
-                    response -> {
-                        if (response.getStatus() == 200) {
-                            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Globals.SHARED_PREFERENCES, Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString(Globals.USER_TOKEN, response.getToken());
-                            editor.putString(Globals.USER_NAME, response.getUserData().getName());
-                            editor.putString(Globals.USER_PHONE, response.getUserData().getPhone());
-                            editor.putString(Globals.USER_IMAGE_PATH, response.getUserData().getImagePath());
-                            if (editor.commit()) {
-                                Toast.makeText(getContext(), "تم تسجيل الدخول", Toast.LENGTH_LONG).show();
-                                Globals.token = sharedPreferences.getString(Globals.USER_TOKEN, "");
-                                Globals.phone = sharedPreferences.getString(Globals.USER_PHONE, "");
+            loginResponseCall.enqueue(new Callback<LoginResponse>() {
 
-                                updateFcmToken();
+                @EverythingIsNonNull
+                @Override
+                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                    assert response.body() != null;
+                    assert getActivity() != null;
+                    if (response.body().getStatus() == 200) {
+                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Globals.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(Globals.USER_TOKEN, response.body().getToken());
+                        editor.putString(Globals.USER_NAME, response.body().getUserData().getName());
+                        editor.putString(Globals.USER_PHONE, response.body().getUserData().getPhone());
+                        editor.putString(Globals.USER_IMAGE_PATH, response.body().getUserData().getImagePath());
+                        if (editor.commit()) {
+                            Toast.makeText(getContext(), "تم تسجيل الدخول", Toast.LENGTH_LONG).show();
+                            Globals.token = sharedPreferences.getString(Globals.USER_TOKEN, "");
+                            Globals.phone = sharedPreferences.getString(Globals.USER_PHONE, "");
 
-                                FirebaseFirestore.getInstance()
-                                        .collection("users")
-                                        .whereEqualTo("phone", response.getUserData().getPhone())
-                                        .get()
-                                        .addOnCompleteListener(task -> {
-                                            if (Objects.requireNonNull(task.getResult()).size() > 0) {
-                                                Map<String, Object> newData = new HashMap<>();
+                            updateFcmToken();
 
-                                                newData.put("fcmToken", Globals.fcmToken);
-                                                FirebaseFirestore.getInstance().collection("users")
-                                                        .document(Objects.requireNonNull(task.getResult()).getDocuments().get(0).getId())
-                                                        .update(newData);
-                                            }
+                            FirebaseFirestore.getInstance()
+                                    .collection("users")
+                                    .whereEqualTo("phone", response.body().getUserData().getPhone())
+                                    .get()
+                                    .addOnCompleteListener(task -> {
+                                        if (Objects.requireNonNull(task.getResult()).size() > 0) {
+                                            Map<String, Object> newData = new HashMap<>();
 
-                                        });
-                                getActivity().finish();
-                            }
-                        } else {
-                            Toast.makeText(getContext(), response.getErrors()[0], Toast.LENGTH_LONG).show();
+                                            newData.put("fcmToken", Globals.fcmToken);
+                                            FirebaseFirestore.getInstance().collection("users")
+                                                    .document(Objects.requireNonNull(task.getResult()).getDocuments().get(0).getId())
+                                                    .update(newData);
+                                        }
+
+                                    });
+                            getActivity().finish();
                         }
+                    } else {
+                        Toast.makeText(getContext(), response.body().getErrors()[0], Toast.LENGTH_LONG).show();
+                    }
 
+                }
 
-                    },
-                    loginError -> Toast.makeText(getContext(), loginError.getMessage(), Toast.LENGTH_LONG).show()
-            );
+                @EverythingIsNonNull
+                @Override
+                public void onFailure(Call<LoginResponse> call, Throwable t) {
 
-            Globals.compositeDisposable.add(disposable);
+                }
+            });
+
+//            Observable<LoginResponse> observable = api.login(phone, password)
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread());
+//
+//            Disposable disposable = observable.subscribe(
+//                    response -> {
+//                        if (response.getStatus() == 200) {
+//                            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Globals.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+//                            SharedPreferences.Editor editor = sharedPreferences.edit();
+//                            editor.putString(Globals.USER_TOKEN, response.getToken());
+//                            editor.putString(Globals.USER_NAME, response.getUserData().getName());
+//                            editor.putString(Globals.USER_PHONE, response.getUserData().getPhone());
+//                            editor.putString(Globals.USER_IMAGE_PATH, response.getUserData().getImagePath());
+//                            if (editor.commit()) {
+//                                Toast.makeText(getContext(), "تم تسجيل الدخول", Toast.LENGTH_LONG).show();
+//                                Globals.token = sharedPreferences.getString(Globals.USER_TOKEN, "");
+//                                Globals.phone = sharedPreferences.getString(Globals.USER_PHONE, "");
+//
+//                                updateFcmToken();
+//
+//                                FirebaseFirestore.getInstance()
+//                                        .collection("users")
+//                                        .whereEqualTo("phone", response.getUserData().getPhone())
+//                                        .get()
+//                                        .addOnCompleteListener(task -> {
+//                                            if (Objects.requireNonNull(task.getResult()).size() > 0) {
+//                                                Map<String, Object> newData = new HashMap<>();
+//
+//                                                newData.put("fcmToken", Globals.fcmToken);
+//                                                FirebaseFirestore.getInstance().collection("users")
+//                                                        .document(Objects.requireNonNull(task.getResult()).getDocuments().get(0).getId())
+//                                                        .update(newData);
+//                                            }
+//
+//                                        });
+//                                getActivity().finish();
+//                            }
+//                        } else {
+//                            Toast.makeText(getContext(), response.getErrors()[0], Toast.LENGTH_LONG).show();
+//                        }
+//
+//
+//                    },
+//                    loginError -> Toast.makeText(getContext(), loginError.getMessage(), Toast.LENGTH_LONG).show()
+//            );
+//
+//            Globals.compositeDisposable.add(disposable);
         });
     }
 
@@ -159,15 +212,22 @@ public class LoginFragment extends Fragment {
 
         FcmTokenUpdateApi api = retrofit.create(FcmTokenUpdateApi.class);
 
-        Observable<FcmTokenUpdateResponse> observable = api.updateFcmToken(Globals.token, Globals.fcmToken)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        Call<FcmTokenUpdateResponse> fcmTokenUpdateResponseCall = api.updateFcmToken(Globals.token, Globals.fcmToken);
 
-        Disposable disposable = observable.subscribe(
-                response -> Log.d(Globals.TAG, response.getMessage()),
-                error -> Log.e(Globals.TAG, Objects.requireNonNull(error.getMessage()))
-        );
+        fcmTokenUpdateResponseCall.enqueue(new Callback<FcmTokenUpdateResponse>() {
 
-        Globals.compositeDisposable.add(disposable);
+            @EverythingIsNonNull
+            @Override
+            public void onResponse(Call<FcmTokenUpdateResponse> call, Response<FcmTokenUpdateResponse> response) {
+                assert response.body() != null;
+                Log.d(Globals.TAG, "" + response.body().getMessage());
+            }
+
+            @EverythingIsNonNull
+            @Override
+            public void onFailure(Call<FcmTokenUpdateResponse> call, Throwable t) {
+                Log.e(Globals.TAG, Objects.requireNonNull(t.getMessage()));
+            }
+        });
     }
 }

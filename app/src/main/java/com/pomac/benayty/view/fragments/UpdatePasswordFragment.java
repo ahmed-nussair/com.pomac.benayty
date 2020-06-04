@@ -17,13 +17,13 @@ import com.pomac.benayty.apis.ForgotPasswordApi;
 import com.pomac.benayty.model.response.UpdatePasswordResponse;
 import com.pomac.benayty.view.interfaces.AppLoginNavigator;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.internal.EverythingIsNonNull;
 
 
 /**
@@ -90,21 +90,38 @@ public class UpdatePasswordFragment extends Fragment {
 
             ForgotPasswordApi forgotPasswordApi = retrofit.create(ForgotPasswordApi.class);
 
-            Observable<UpdatePasswordResponse> observable = forgotPasswordApi.updatePassword(resetCode, password, passwordConfirm)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
+            Call<UpdatePasswordResponse> updatePasswordResponseCall = forgotPasswordApi.updatePassword(resetCode, password, passwordConfirm);
 
-            Disposable disposable = observable.subscribe(
-                    response -> {
-                        Toast.makeText(getContext(), "لقد تم تغيير كلمة المرور .. يمكنك تسجيل الدخول", Toast.LENGTH_LONG).show();
-                        navigator.navigateToLoginScreen();
-                    },
-                    error -> {
-                        Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-            );
+            updatePasswordResponseCall.enqueue(new Callback<UpdatePasswordResponse>() {
+                @EverythingIsNonNull
+                @Override
+                public void onResponse(Call<UpdatePasswordResponse> call, Response<UpdatePasswordResponse> response) {
+                    Toast.makeText(getContext(), "لقد تم تغيير كلمة المرور .. يمكنك تسجيل الدخول", Toast.LENGTH_LONG).show();
+                    navigator.navigateToLoginScreen();
+                }
 
-            Globals.compositeDisposable.add(disposable);
+                @EverythingIsNonNull
+                @Override
+                public void onFailure(Call<UpdatePasswordResponse> call, Throwable t) {
+                    Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+
+//            Observable<UpdatePasswordResponse> observable = forgotPasswordApi.updatePassword(resetCode, password, passwordConfirm)
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread());
+//
+//            Disposable disposable = observable.subscribe(
+//                    response -> {
+//                        Toast.makeText(getContext(), "لقد تم تغيير كلمة المرور .. يمكنك تسجيل الدخول", Toast.LENGTH_LONG).show();
+//                        navigator.navigateToLoginScreen();
+//                    },
+//                    error -> {
+//                        Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+//                    }
+//            );
+//
+//            Globals.compositeDisposable.add(disposable);
 
         });
     }

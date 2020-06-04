@@ -5,6 +5,7 @@ import com.pomac.benayty.model.response.AddingAdResponse;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Multipart;
@@ -15,13 +16,13 @@ public interface AddingAdApi {
 
     @Multipart
     @POST("benaity/public/api/advertisements/add")
-    Observable<AddingAdResponse> addAdvertisement(
+    Call<AddingAdResponse> addAdvertisement(
             @Body RequestBody data
     );
 
     @Multipart
     @POST("benaity/public/api/advertisements/add")
-    Observable<AddingAdResponse> addAdvertisement(
+    Call<AddingAdResponse> addAdvertisement(
             @Part("token") RequestBody token,
             @Part("main_id") RequestBody mainCategoryId,
             @Part("secondary_id") RequestBody secondaryCategoryId,

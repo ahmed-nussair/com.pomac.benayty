@@ -1,16 +1,15 @@
 package com.pomac.benayty.view.fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
@@ -19,13 +18,13 @@ import com.pomac.benayty.model.response.ForgotPasswordResponse;
 import com.pomac.benayty.view.dialogs.CheckingCodeDialog;
 import com.pomac.benayty.view.interfaces.AppLoginNavigator;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.internal.EverythingIsNonNull;
 
 
 /**
@@ -85,27 +84,54 @@ public class ForgotPasswordFragment extends Fragment {
 
             ForgotPasswordApi forgotPasswordApi = retrofit.create(ForgotPasswordApi.class);
 
-            Observable<ForgotPasswordResponse> observable = forgotPasswordApi.sendForPasswordRecovery(email)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
+            Call<ForgotPasswordResponse> forgotPasswordResponseCall = forgotPasswordApi.sendForPasswordRecovery(email);
 
-            Disposable disposable = observable.subscribe(
-                    response -> {
-                        if (response.getStatus() == 200) {
-                            CheckingCodeDialog dialog =
-                                    new CheckingCodeDialog(getActivity(),
-                                            android.R.style.Theme_Translucent_NoTitleBar, this, navigator, email);
-                            dialog.setCancelable(false);
-                            dialog.show();
-                        } else {
-                            Toast.makeText(getActivity(), "عفوًا .. البريد الإلكتروني الذي أدخلته غير مسجل", Toast.LENGTH_LONG).show();
-                        }
+            forgotPasswordResponseCall.enqueue(new Callback<ForgotPasswordResponse>() {
 
-                    },
-                    error -> Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show()
-            );
+                @EverythingIsNonNull
+                @Override
+                public void onResponse(Call<ForgotPasswordResponse> call, Response<ForgotPasswordResponse> response) {
+                    assert response.body() != null;
+                    assert getActivity() != null;
+                    if (response.body().getStatus() == 200) {
+                        CheckingCodeDialog dialog =
+                                new CheckingCodeDialog(getActivity(),
+                                        android.R.style.Theme_Translucent_NoTitleBar, ForgotPasswordFragment.this, navigator, email);
+                        dialog.setCancelable(false);
+                        dialog.show();
+                    } else {
+                        Toast.makeText(getActivity(), "عفوًا .. البريد الإلكتروني الذي أدخلته غير مسجل", Toast.LENGTH_LONG).show();
+                    }
+                }
 
-            Globals.compositeDisposable.add(disposable);
+                @EverythingIsNonNull
+                @Override
+                public void onFailure(Call<ForgotPasswordResponse> call, Throwable t) {
+
+                }
+            });
+
+//            Observable<ForgotPasswordResponse> observable = forgotPasswordApi.sendForPasswordRecovery(email)
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread());
+//
+//            Disposable disposable = observable.subscribe(
+//                    response -> {
+//                        if (response.getStatus() == 200) {
+//                            CheckingCodeDialog dialog =
+//                                    new CheckingCodeDialog(getActivity(),
+//                                            android.R.style.Theme_Translucent_NoTitleBar, this, navigator, email);
+//                            dialog.setCancelable(false);
+//                            dialog.show();
+//                        } else {
+//                            Toast.makeText(getActivity(), "عفوًا .. البريد الإلكتروني الذي أدخلته غير مسجل", Toast.LENGTH_LONG).show();
+//                        }
+//
+//                    },
+//                    error -> Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show()
+//            );
+//
+//            Globals.compositeDisposable.add(disposable);
 
         });
     }

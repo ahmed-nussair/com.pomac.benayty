@@ -8,13 +8,13 @@ import com.pomac.benayty.Globals;
 import com.pomac.benayty.apis.AdsApi;
 import com.pomac.benayty.model.response.AdsResponse;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.internal.EverythingIsNonNull;
 
 public class AdsViewModel extends ViewModel {
 
@@ -37,16 +37,21 @@ public class AdsViewModel extends ViewModel {
 
         AdsApi api = retrofit.create(AdsApi.class);
 
-        Observable<AdsResponse> observable = api.getAds(mainCategoryId, secondaryCategoryId, areaId, cityId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        Call<AdsResponse> adsResponseCall = api.getAds(mainCategoryId, secondaryCategoryId, areaId, cityId);
 
-        Disposable disposable = observable.subscribe(
-                response -> mutableLiveData.setValue(response),
-                error -> mutableLiveData.setValue(null)
-        );
+        adsResponseCall.enqueue(new Callback<AdsResponse>() {
+            @EverythingIsNonNull
+            @Override
+            public void onResponse(Call<AdsResponse> call, Response<AdsResponse> response) {
+                mutableLiveData.setValue(response.body());
+            }
 
-        Globals.compositeDisposable.add(disposable);
+            @EverythingIsNonNull
+            @Override
+            public void onFailure(Call<AdsResponse> call, Throwable t) {
+
+            }
+        });
 
     }
 }

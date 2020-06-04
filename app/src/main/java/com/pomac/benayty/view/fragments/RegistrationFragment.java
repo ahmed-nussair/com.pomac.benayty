@@ -3,10 +3,6 @@ package com.pomac.benayty.view.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.pomac.benayty.Globals;
@@ -28,13 +27,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.internal.EverythingIsNonNull;
 
 
 /**
@@ -110,44 +109,48 @@ public class RegistrationFragment extends Fragment {
 
             RegisterApi api = retrofit.create(RegisterApi.class);
 
-            Observable<RegisterResponse> observable = api.register(name, email, phone, password)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
+            Call<RegisterResponse> registerResponseCall = api.register(name, email, phone, password);
 
-            Disposable disposable = observable.subscribe(
-                    response -> {
-                        if (response.getStatus() == 200) {
-                            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Globals.SHARED_PREFERENCES, Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString(Globals.USER_TOKEN, response.getToken());
-                            editor.putString(Globals.USER_NAME, response.getUserData().getName());
-                            editor.putString(Globals.USER_PHONE, response.getUserData().getPhone());
-                            editor.putString(Globals.USER_IMAGE_PATH, response.getUserData().getImagePath());
-                            if (editor.commit()) {
-                                Toast.makeText(getContext(), "تم تسجيلك", Toast.LENGTH_LONG).show();
-                                Globals.token = sharedPreferences.getString(Globals.USER_TOKEN, "");
-                                Globals.phone = sharedPreferences.getString(Globals.USER_PHONE, "");
+            registerResponseCall.enqueue(new Callback<RegisterResponse>() {
 
-                                updateFcmToken();
+                @EverythingIsNonNull
+                @Override
+                public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
+                    assert response.body() != null;
+                    assert getActivity() != null;
+                    if (response.body().getStatus() == 200) {
+                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Globals.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(Globals.USER_TOKEN, response.body().getToken());
+                        editor.putString(Globals.USER_NAME, response.body().getUserData().getName());
+                        editor.putString(Globals.USER_PHONE, response.body().getUserData().getPhone());
+                        editor.putString(Globals.USER_IMAGE_PATH, response.body().getUserData().getImagePath());
+                        if (editor.commit()) {
+                            Toast.makeText(getContext(), "تم تسجيلك", Toast.LENGTH_LONG).show();
+                            Globals.token = sharedPreferences.getString(Globals.USER_TOKEN, "");
+                            Globals.phone = sharedPreferences.getString(Globals.USER_PHONE, "");
 
-                                Map<String, Object> newUser = new HashMap<>();
-                                newUser.put("fcmToken", Globals.fcmToken);
-                                newUser.put("name", response.getUserData().getName());
-                                newUser.put("phone", response.getUserData().getPhone());
-                                newUser.put("imagePath", response.getUserData().getImagePath());
-                                FirebaseFirestore.getInstance().collection("users").add(newUser);
-                                getActivity().finish();
-                            }
-                        } else {
-                            Toast.makeText(getContext(), response.getErrors()[0], Toast.LENGTH_LONG).show();
+                            updateFcmToken();
+
+                            Map<String, Object> newUser = new HashMap<>();
+                            newUser.put("fcmToken", Globals.fcmToken);
+                            newUser.put("name", response.body().getUserData().getName());
+                            newUser.put("phone", response.body().getUserData().getPhone());
+                            newUser.put("imagePath", response.body().getUserData().getImagePath());
+                            FirebaseFirestore.getInstance().collection("users").add(newUser);
+                            getActivity().finish();
                         }
-                    },
-                    registrationError -> {
-                        Toast.makeText(getContext(), registrationError.getMessage(), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getContext(), response.body().getErrors()[0], Toast.LENGTH_LONG).show();
                     }
-            );
+                }
 
-            Globals.compositeDisposable.add(disposable);
+                @EverythingIsNonNull
+                @Override
+                public void onFailure(Call<RegisterResponse> call, Throwable t) {
+
+                }
+            });
         });
     }
 
@@ -160,15 +163,22 @@ public class RegistrationFragment extends Fragment {
 
         FcmTokenUpdateApi api = retrofit.create(FcmTokenUpdateApi.class);
 
-        Observable<FcmTokenUpdateResponse> observable = api.updateFcmToken(Globals.token, Globals.fcmToken)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        Call<FcmTokenUpdateResponse> fcmTokenUpdateResponseCall = api.updateFcmToken(Globals.token, Globals.fcmToken);
 
-        Disposable disposable = observable.subscribe(
-                response -> Log.d(Globals.TAG, response.getMessage()),
-                error -> Log.e(Globals.TAG, Objects.requireNonNull(error.getMessage()))
-        );
+        fcmTokenUpdateResponseCall.enqueue(new Callback<FcmTokenUpdateResponse>() {
 
-        Globals.compositeDisposable.add(disposable);
+            @EverythingIsNonNull
+            @Override
+            public void onResponse(Call<FcmTokenUpdateResponse> call, Response<FcmTokenUpdateResponse> response) {
+                assert response.body() != null;
+                Log.d(Globals.TAG, response.body().getMessage());
+            }
+
+            @EverythingIsNonNull
+            @Override
+            public void onFailure(Call<FcmTokenUpdateResponse> call, Throwable t) {
+                Log.e(Globals.TAG, Objects.requireNonNull(t.getMessage()));
+            }
+        });
     }
 }

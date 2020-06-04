@@ -19,13 +19,13 @@ import com.pomac.benayty.model.response.ContactUsResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.internal.EverythingIsNonNull;
 
 
 /**
@@ -104,22 +104,45 @@ public class ContactUsFragment extends Fragment {
 
             ContactUsApi api = retrofit.create(ContactUsApi.class);
 
-            Observable<ContactUsResponse> observable = api.send(data)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
+            Call<ContactUsResponse> contactUsResponseCall = api.send(data);
 
-            Disposable disposable = observable.subscribe(
-                    response -> {
-                        contactUsNameEditText.setText("");
-                        contactUsEmailEditText.setText("");
-                        contactUsPhoneEditText.setText("");
-                        contactUsSubjectEditText.setText("");
-                        contactUsMessageEditText.setText("");
-                        Toast.makeText(getActivity(), response.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-            );
+            contactUsResponseCall.enqueue(new Callback<ContactUsResponse>() {
 
-            Globals.compositeDisposable.add(disposable);
+                @EverythingIsNonNull
+                @Override
+                public void onResponse(Call<ContactUsResponse> call, Response<ContactUsResponse> response) {
+                    contactUsNameEditText.setText("");
+                    contactUsEmailEditText.setText("");
+                    contactUsPhoneEditText.setText("");
+                    contactUsSubjectEditText.setText("");
+                    contactUsMessageEditText.setText("");
+                    assert response.body() != null;
+                    Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+                @EverythingIsNonNull
+                @Override
+                public void onFailure(Call<ContactUsResponse> call, Throwable t) {
+
+                }
+            });
+
+//            Observable<ContactUsResponse> observable = api.send(data)
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread());
+//
+//            Disposable disposable = observable.subscribe(
+//                    response -> {
+//                        contactUsNameEditText.setText("");
+//                        contactUsEmailEditText.setText("");
+//                        contactUsPhoneEditText.setText("");
+//                        contactUsSubjectEditText.setText("");
+//                        contactUsMessageEditText.setText("");
+//                        Toast.makeText(getActivity(), response.getMessage(), Toast.LENGTH_LONG).show();
+//                    }
+//            );
+//
+//            Globals.compositeDisposable.add(disposable);
         });
     }
 }

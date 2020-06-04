@@ -1,5 +1,7 @@
 package com.pomac.benayty.viewmodel;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -8,13 +10,15 @@ import com.pomac.benayty.Globals;
 import com.pomac.benayty.apis.MainCategoriesApi;
 import com.pomac.benayty.model.response.MainCategoriesResponse;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.internal.EverythingIsNonNull;
 
 public class MainCategoriesViewModel extends ViewModel {
 
@@ -37,13 +41,21 @@ public class MainCategoriesViewModel extends ViewModel {
 
         MainCategoriesApi api = retrofit.create(MainCategoriesApi.class);
 
-        Observable<MainCategoriesResponse> observable = api.getMainCategories()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        Call<MainCategoriesResponse> call = api.getMainCategories();
 
-        Disposable disposable = observable.subscribe(response -> mainCategoriesResponse.setValue(response),
-                error -> mainCategoriesResponse.setValue(null));
+        call.enqueue(new Callback<MainCategoriesResponse>() {
 
-        Globals.compositeDisposable.add(disposable);
+            @EverythingIsNonNull
+            @Override
+            public void onResponse(Call<MainCategoriesResponse> call, Response<MainCategoriesResponse> response) {
+                mainCategoriesResponse.setValue(response.body());
+            }
+
+            @EverythingIsNonNull
+            @Override
+            public void onFailure(Call<MainCategoriesResponse> call, Throwable t) {
+                Log.d(Globals.TAG, Objects.requireNonNull(t.getMessage()));
+            }
+        });
     }
 }

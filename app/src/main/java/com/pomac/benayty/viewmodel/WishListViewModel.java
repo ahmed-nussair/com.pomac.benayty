@@ -8,13 +8,13 @@ import com.pomac.benayty.Globals;
 import com.pomac.benayty.apis.WishListApi;
 import com.pomac.benayty.model.response.WishListResponse;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.internal.EverythingIsNonNull;
 
 public class WishListViewModel extends ViewModel {
 
@@ -37,15 +37,21 @@ public class WishListViewModel extends ViewModel {
 
         WishListApi api = retrofit.create(WishListApi.class);
 
-        Observable<WishListResponse> observable = api.getWishList(token)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        Call<WishListResponse> wishListResponseCall = api.getWishList(token);
 
-        Disposable disposable = observable.subscribe(
-                response -> wishListResponseMutableLiveData.setValue(response),
-                error -> wishListResponseMutableLiveData.setValue(null)
-        );
+        wishListResponseCall.enqueue(new Callback<WishListResponse>() {
 
-        Globals.compositeDisposable.add(disposable);
+            @EverythingIsNonNull
+            @Override
+            public void onResponse(Call<WishListResponse> call, Response<WishListResponse> response) {
+                wishListResponseMutableLiveData.setValue(response.body());
+            }
+
+            @EverythingIsNonNull
+            @Override
+            public void onFailure(Call<WishListResponse> call, Throwable t) {
+
+            }
+        });
     }
 }
