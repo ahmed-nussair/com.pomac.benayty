@@ -31,15 +31,9 @@ import com.pomac.benayty.view.interfaces.AppNavigator;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -183,37 +177,6 @@ public class AddingAdPag2Fragment extends Fragment {
 
                 }
             });
-
-
-//            Observable<AddingAdResponse> addingAdResponseObservable = addingAdApi.addAdvertisement(
-//                    RequestBody.create(MediaType.parse("multipart/form-data"), Globals.token),
-//                    RequestBody.create(MediaType.parse("multipart/form-data"), "" + mainCategoryId),
-//                    RequestBody.create(MediaType.parse("multipart/form-data"), "" + secondaryCategoryId),
-//                    RequestBody.create(MediaType.parse("multipart/form-data"), "" + areaId),
-//                    RequestBody.create(MediaType.parse("multipart/form-data"), "" + cityId),
-//                    RequestBody.create(MediaType.parse("multipart/form-data"), addingAdNameEditText.getText().toString()),
-//                    RequestBody.create(MediaType.parse("multipart/form-data"), addingAdMobileEditText.getText().toString()),
-//                    RequestBody.create(MediaType.parse("multipart/form-data"), addingAdDescriptionEditText.getText().toString()),
-//                    body
-//            )
-//                    .subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread());
-//
-//            Disposable disposable = addingAdResponseObservable.subscribe(
-//                    response -> {
-//                        Log.d(Globals.TAG, response.getMessage());
-//                        if (response.getStatus() == 200) {
-//                            Toast.makeText(getContext(), response.getMessage(), Toast.LENGTH_LONG).show();
-//                            navigator.navigateToMainPage();
-//                        } else {
-//                            Toast.makeText(getContext(), response.getErrors()[0], Toast.LENGTH_LONG).show();
-//                        }
-//
-//                    },
-//                    addingAdError -> Toast.makeText(getContext(), addingAdError.getMessage(), Toast.LENGTH_LONG).show()
-//            );
-//
-//            Globals.compositeDisposable.add(disposable);
 
         });
 

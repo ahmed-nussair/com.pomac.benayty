@@ -1,5 +1,7 @@
 package com.pomac.benayty.viewmodel;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -44,6 +46,8 @@ public class WishListViewModel extends ViewModel {
             @EverythingIsNonNull
             @Override
             public void onResponse(Call<WishListResponse> call, Response<WishListResponse> response) {
+                Log.d(Globals.TAG, response.message());
+                Log.d(Globals.TAG, response.body().toString());
                 wishListResponseMutableLiveData.setValue(response.body());
             }
 

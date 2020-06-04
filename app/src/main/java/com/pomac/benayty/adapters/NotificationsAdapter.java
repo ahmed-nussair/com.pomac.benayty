@@ -1,20 +1,17 @@
 package com.pomac.benayty.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.pomac.benayty.Globals;
 import com.pomac.benayty.R;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.pomac.benayty.view.interfaces.OnNotificationsItemSelected;
 
 import java.util.Calendar;
 import java.util.List;
@@ -25,10 +22,15 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
     private Context context;
     private List<Map<String, String>> notificationsData;
+    private OnNotificationsItemSelected onNotificationsItemSelected;
 
-    public NotificationsAdapter(Context context, List<Map<String, String>> notificationsData) {
+    public NotificationsAdapter
+            (Context context,
+             List<Map<String, String>> notificationsData,
+             OnNotificationsItemSelected onNotificationsItemSelected) {
         this.context = context;
         this.notificationsData = notificationsData;
+        this.onNotificationsItemSelected = onNotificationsItemSelected;
     }
 
     @NonNull
@@ -45,10 +47,21 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         Calendar calendar = Calendar.getInstance();
 
         if (calendar.get(Calendar.AM_PM) == Calendar.PM) {
-            holder.notificationTimeTextView.setText(String.format(Locale.US, "%d:%d PM", calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE)));
+            holder.notificationTimeTextView.setText
+                    (String.format(Locale.US,
+                            "%d:%d PM",
+                            calendar.get(Calendar.HOUR),
+                            calendar.get(Calendar.MINUTE)));
         } else {
-            holder.notificationTimeTextView.setText(String.format(Locale.US, "%d:%d AM", calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE)));
+            holder.notificationTimeTextView.setText
+                    (String.format(Locale.US,
+                            "%d:%d AM",
+                            calendar.get(Calendar.HOUR),
+                            calendar.get(Calendar.MINUTE)));
         }
+
+        holder.notificationsItemRelativeLayout.setOnClickListener
+                (v -> onNotificationsItemSelected.onNotificationsItemSelected(notificationsData.get(position)));
 
     }
 
@@ -61,11 +74,14 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
         TextView notificationTextView;
         TextView notificationTimeTextView;
+        RelativeLayout notificationsItemRelativeLayout;
 
         public NotificationsViewHolder(@NonNull View itemView) {
             super(itemView);
             notificationTextView = itemView.findViewById(R.id.notificationTextView);
             notificationTimeTextView = itemView.findViewById(R.id.notificationTimeTextView);
+            notificationsItemRelativeLayout =
+                    itemView.findViewById(R.id.notificationsItemRelativeLayout);
         }
     }
 }

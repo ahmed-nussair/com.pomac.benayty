@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/_60sdp"
     android:layout_margin="@dimen/_10sdp"
@@ -10,7 +9,7 @@
 
 
     <RelativeLayout
-        android:id="@+id/adItemRelativeLayout"
+        android:id="@+id/notificationsItemRelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_60sdp"
         android:background="#ffffff">

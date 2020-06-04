@@ -55,7 +55,10 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.WishLi
 
     @Override
     public void onBindViewHolder(@NonNull WishListViewHolder holder, int position) {
-        holder.adNameTextView.setText(wishList.get(position).getAdvertisement().getTitle());
+        holder.adNameTextView.setText(
+                wishList.get(position).getAdvertisement().getTitle() != null ?
+                        wishList.get(position).getAdvertisement().getTitle() : ""
+        );
         holder.adUserNameTextView.setText(wishList.get(position).getAdvertisement().getUser().getName());
 
         Transformation transformation = new RoundedTransformationBuilder()
