@@ -86,7 +86,6 @@ public class NotificationFragment extends Fragment implements OnNotificationsIte
 
     @Override
     public void onNotificationsItemSelected(Map<String, String> notificationsItem) {
-        Log.d(Globals.TAG, notificationsItem.toString());
 
         String moreDataString = notificationsItem.get("moredata");
 
